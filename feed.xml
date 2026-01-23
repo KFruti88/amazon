@@ -1,1 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/">
+<channel>
+  <title>Clay County Emergency Gear & Deals</title>
+  <link>https://kfruti88.github.io/amazon/</link>
+  <description>Recommended safety gear and winter apparel.</description>
 
+  <item>
+    <title>MAGCOMSEN Men's Sherpa Lined Pullover</title>
+    <link>https://amzn.to/49Hu0te</link>
+    <description>Heavyweight sherpa lined sweatshirts to keep you warm in cold weather.</description>
+    <media:content url="https://m.media-amazon.com/images/I/81WHJSUYtVL._AC_SX679_.jpg" medium="image" />
+    <pubDate>Fri, 23 Jan 2026 10:00:00 EST</pubDate>
+  </item>
+
+  <item>
+    <title>Wrangler Men's Fleece Lined Carpenter Pants</title>
+    <link>https://amzn.to/4qJGicc</link>
+    <description>Lined with warm fleece that won’t add bulk—perfect for cold-weather work.</description>
+    <media:content url="https://m.media-amazon.com/images/I/71kuNgSVfjL._AC_SX569_.jpg" medium="image" />
+    <pubDate>Fri, 23 Jan 2026 09:45:00 EST</pubDate>
+  </item>
+
+  <item>
+    <title>Portable Jump Starter</title>
+    <link>https://amzn.to/4jSSeFT</link>
+    <description>Don't get stranded. Jump-start your car solo in seconds.</description>
+    <media:content url="https://m.media-amazon.com/images/I/71IIGG9bP2L._AC_SL1500_.jpg" medium="image" />
+    <pubDate>Fri, 23 Jan 2026 09:30:00 EST</pubDate>
+  </item>
+
+</channel>
+</rss>
