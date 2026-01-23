@@ -6,12 +6,19 @@ on:
     paths:
       - 'index.html'
 
+# Add this to ensure the Action has permission to save the feed.xml
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          # This fetch-depth ensures git pull works correctly later
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -26,5 +33,11 @@ jobs:
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
           git add feed.xml
+          
+          # Check if there are changes before committing
           git commit -m "Auto-update RSS feed" || exit 0
+          
+          # Pull latest changes to sync with your manual index.html save
+          git pull --rebase origin main
+          
           git push
