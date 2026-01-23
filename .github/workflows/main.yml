@@ -6,7 +6,7 @@ on:
     paths:
       - 'index.html'
 
-# Add this to ensure the Action has permission to save the feed.xml
+# Permissions to allow the bot to save the feed.xml back to your repo
 permissions:
   contents: write
 
@@ -17,7 +17,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
-          # This fetch-depth ensures git pull works correctly later
           fetch-depth: 0
 
       - name: Set up Python
@@ -34,10 +33,10 @@ jobs:
           git config --global user.email "action@github.com"
           git add feed.xml
           
-          # Check if there are changes before committing
+          # Only commit if changes were actually made to the feed
           git commit -m "Auto-update RSS feed" || exit 0
           
-          # Pull latest changes to sync with your manual index.html save
+          # Sync with any manual changes you made to index.html
           git pull --rebase origin main
           
           git push
