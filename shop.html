@@ -1,0 +1,44 @@
+<style>
+    .shop-container {
+        display: flex;
+        flex-wrap: wrap; /* Fixed: was 'wrap' now 'flex-wrap' */
+        gap: 20px;
+        justify-content: center;
+        padding: 20px;
+        font-family: Arial, sans-serif;
+    }
+    .product-card {
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        width: 250px;
+        padding: 15px;
+        text-align: center;
+        transition: 0.3s;
+        background-color: #fff;
+    }
+    .product-card:hover { box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+    .product-card img { max-width: 100%; border-radius: 5px; height: auto; }
+    .buy-btn {
+        background: #FF9900;
+        color: white !important; /* Made white for better contrast */
+        padding: 10px;
+        text-decoration: none;
+        border-radius: 5px;
+        display: block;
+        margin-top: 10px;
+        font-weight: bold;
+    }
+    .disclosure { font-size: 11px; color: #777; margin-top: 15px; text-align: center; }
+</style>
+
+<div class="shop-container">
+    <div class="product-card">
+        <img src="https://m.media-amazon.com/images/I/71eCGdR7nfL._AC_SL1389_.jpg" alt="Product Name">
+        <h3 style="font-size: 1.1em; color: #333;">Emergency Blanket 4-Pack</h3>
+        <p style="font-size: 0.9em; color: #666;">Emergency Blanket 4-Pack Space Mylar Blankets Survival Gear and Supplies Reusable Thermal Camping Hunting Essentials First Aid Car Backpacking Marathon Kit Prepper Go Rave Bug Out Bag Foil Cold Winter</p>
+        <a href="https://amzn.to/3LS2od3" class="buy-btn" target="_blank">Check Price on Amazon</a>
+    </div>
+
+    </div>
+
+<p class="disclosure">As an Amazon Associate, I earn from qualifying purchases.</p>
