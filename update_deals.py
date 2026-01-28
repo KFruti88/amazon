@@ -25,7 +25,7 @@ def update_site():
         original_content = f.read()
 
     # 3. SAFETY CHECK: If anchors are missing, STOP IMMEDIATELY
-    if "" not in original_content or "" not in original_content:
+    if "<!-- DEALS_START -->" not in original_content or "<!-- DEALS_END -->" not in original_content:
         print("CRITICAL ERROR: Comment anchors missing. Aborting to prevent file erasure!")
         # This exit code 1 tells GitHub the job failed, so it won't push a broken file
         sys.exit(1)
@@ -44,8 +44,8 @@ def update_site():
         </div>"""
 
     # 5. Perform the swap in memory
-    pattern = re.compile(r'.*?', re.DOTALL)
-    updated_content = pattern.sub(f'{grid_html}\n', original_content)
+    pattern = re.compile(r'<!-- DEALS_START -->.*?<!-- DEALS_END -->', re.DOTALL)
+    updated_content = pattern.sub(f'<!-- DEALS_START -->{grid_html}\n<!-- DEALS_END -->', original_content)
 
     # 6. FINAL PROTECTION: Verify the new content is valid
     if len(updated_content) < (len(original_content) * 0.5):
