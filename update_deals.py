@@ -1,43 +1,47 @@
-import requests
+import os
 import re
 
-# Your permanent tracking ID
 TAG = "werewolf3788-20"
+HTML_FILE = "index.html"
 
 def get_deals():
-    # This simulates pulling from your Amazon Search URL. 
-    # To keep it passive, we use a rotation of high-converting clearance items.
-    deals = [
-        {"title": "13-Piece Knife Set", "asin": "B09NVNCSR3", "desc": "High-carbon stainless steel with built-in sharpener."},
-        {"title": "Apple AirTag 4-Pack", "asin": "B0932QW2JZ", "desc": "Never lose your keys or wallet again. Top clearance item."},
-        {"title": "Fab Totes Storage", "asin": "B0968K6YF9", "desc": "6-pack reinforced handles for home organization."},
-        {"title": "Walking Pad Treadmill", "asin": "B0C3M7Z9P5", "desc": "Under-desk portable fitness for home office."},
-        {"title": "Portable Jump Starter", "asin": "B08P5FKGRX", "desc": "Winter essential. Jump your car solo in seconds."}
+    return [
+        {"title": "13-Piece Knife Set", "asin": "B09NVNCSR3", "desc": "60% Off Clearance. High-carbon stainless steel."},
+        {"title": "Apple AirTag 4-Pack", "asin": "B0932QW2JZ", "desc": "Never lose your gear again. Limited time discount."},
+        {"title": "Under Desk Walking Pad", "asin": "B0C3M7Z9P5", "desc": "90% Price Drop. Stay active while working from home."},
+        {"title": "Portable Car Jump Starter", "asin": "B08P5FKGRX", "desc": "Winter Essential. 2500A Peak emergency power."}
     ]
-    return deals
 
 def update_html():
-    with open('index.html', 'r', encoding='utf-8') as f:
-        html = f.read()
+    if not os.path.exists(HTML_FILE):
+        return
 
+    with open(HTML_FILE, 'r', encoding='utf-8') as f:
+        content = f.read()
+
+    # Create Sideways/Glossy HTML
     deals = get_deals()
-    new_grid_html = ""
-
+    new_html = "\n"
     for d in deals:
-        new_grid_html += f"""
-        <div class="deal-box">
-            <h3 class="deal-title">{d['title']}</h3>
-            <p class="deal-desc">{d['desc']}</p>
+        new_html += f"""        <div class="deal-box">
+            <div class="deal-info">
+                <h3 class="deal-title">{d['title']}</h3>
+                <p class="deal-desc">{d['desc']}</p>
+            </div>
             <a href="https://www.amazon.com/dp/{d['asin']}?tag={TAG}" target="_blank" class="buy-btn">View on Amazon</a>
-        </div>"""
+        </div>\n"""
 
-    # This replaces the content inside your grid div
-    # Logic: It looks for and comments
+    # Fail-safe check for anchors
+    if "" not in content or "" not in content:
+        print("ERROR: Anchors missing! File was not changed to prevent erasing data.")
+        return
+
     pattern = re.compile(r'.*?', re.DOTALL)
-    updated_html = pattern.sub(f'{new_grid_html}', html)
+    updated = pattern.sub(f'{new_html}        ', content)
 
-    with open('index.html', 'w', encoding='utf-8') as f:
-        f.write(updated_html)
+    with open(HTML_FILE, 'w', encoding='utf-8') as f:
+        f.write(updated)
+    print("Grid updated successfully!")
 
 if __name__ == "__main__":
     update_html()
