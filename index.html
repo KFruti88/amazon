@@ -8,9 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Community Deals Hub</title>
     <style>
-        /* Coding Standard: Universal Box Sizing & 90% Width */
         * { box-sizing: border-box; }
-        
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
             margin: 0;
@@ -21,111 +19,20 @@
             align-items: center;
             overflow-x: hidden;
         }
-
-        .universal-wrapper {
-            width: 90%;
-            max-width: 1400px;
-            margin: 30px 0;
-            z-index: 10;
-        }
-
-        #site-header {
-            text-align: center;
-            padding: 40px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-            background: #333; 
-        }
-
-        .deals-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-
-        /* Redesigned Text-Only Card */
-        .deal-box {
-            background: #1e1e1e;
-            border: 2px solid #333;
-            border-radius: 12px;
-            padding: 25px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            transition: 0.3s ease;
-            min-height: 250px;
-            position: relative;
-        }
-
-        .deal-box:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent, #ff9900);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.6);
-        }
-
-        .deal-category {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--accent, #ff9900);
-            margin-bottom: 10px;
-            font-weight: bold;
-        }
-
-        .deal-title {
-            font-size: 1.3rem;
-            color: #fff;
-            margin: 0 0 15px 0;
-            line-height: 1.2;
-        }
-
-        .deal-desc {
-            font-size: 0.95rem;
-            color: #bbb;
-            margin-bottom: 20px;
-            line-height: 1.5;
-            flex-grow: 1;
-        }
-
-        .buy-btn {
-            background: var(--accent, #ff9900);
-            color: #111;
-            text-decoration: none;
-            padding: 15px;
-            text-align: center;
-            font-weight: bold;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: 0.2s;
-        }
-
-        .buy-btn:hover {
-            background: #fff;
-            color: #000;
-        }
-
-        /* NYE & Holiday Styles */
-        #countdown-banner {
-            position: sticky; top: 0; width: 100%; background: #000;
-            color: var(--accent, #ff9900); text-align: center; padding: 10px;
-            font-weight: bold; z-index: 100; border-bottom: 2px solid var(--accent, #ff9900);
-            display: none;
-        }
-
-        .holiday-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 999;
-        }
-
-        .disclosure {
-            font-size: 0.8rem; color: #666; text-align: center;
-            margin: 50px 0; padding: 20px; border-top: 1px solid #333; width: 90%;
-        }
-
-        @media (max-width: 768px) {
-            .deals-grid { grid-template-columns: 1fr; }
-            .universal-wrapper { width: 95%; }
-        }
+        .universal-wrapper { width: 90%; max-width: 1400px; margin: 30px 0; z-index: 10; }
+        #site-header { text-align: center; padding: 40px; border-radius: 15px; margin-bottom: 30px; background: #333; }
+        .deals-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .deal-box { background: #1e1e1e; border: 2px solid #333; border-radius: 12px; padding: 25px; display: flex; flex-direction: column; justify-content: space-between; transition: 0.3s ease; min-height: 250px; position: relative; }
+        .deal-box:hover { transform: translateY(-5px); border-color: var(--accent, #ff9900); box-shadow: 0 8px 20px rgba(0,0,0,0.6); }
+        .deal-category { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--accent, #ff9900); margin-bottom: 10px; font-weight: bold; }
+        .deal-title { font-size: 1.3rem; color: #fff; margin: 0 0 15px 0; line-height: 1.2; }
+        .deal-desc { font-size: 0.95rem; color: #bbb; margin-bottom: 20px; line-height: 1.5; flex-grow: 1; }
+        .buy-btn { background: var(--accent, #ff9900); color: #111; text-decoration: none; padding: 15px; text-align: center; font-weight: bold; border-radius: 8px; font-size: 1rem; transition: 0.2s; }
+        .buy-btn:hover { background: #fff; color: #000; }
+        #countdown-banner { position: sticky; top: 0; width: 100%; background: #000; color: var(--accent, #ff9900); text-align: center; padding: 10px; font-weight: bold; z-index: 100; border-bottom: 2px solid var(--accent, #ff9900); display: none; }
+        .holiday-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999; }
+        .disclosure { font-size: 0.8rem; color: #666; text-align: center; margin: 50px 0; padding: 20px; border-top: 1px solid #333; width: 90%; }
+        @media (max-width: 768px) { .deals-grid { grid-template-columns: 1fr; } .universal-wrapper { width: 95%; } }
     </style>
 </head>
 <body>
@@ -140,50 +47,7 @@
     </div>
 
     <div class="deals-grid" id="product-grid">
-        
-        <div class="deal-box">
-            <div class="deal-category">Kitchen & Dining</div>
-            <h3 class="deal-title">Astercook 13-Piece Knife Set</h3>
-            <p class="deal-desc">Professional high-carbon stainless steel blades with a built-in sharpener block. A top-rated clearance find.</p>
-            <a href="https://www.amazon.com/dp/B09NVNCSR3?tag=werewolf3788-20" target="_blank" class="buy-btn">View Deal on Amazon</a>
         </div>
-
-        <div class="deal-box">
-            <div class="deal-category">Electronics</div>
-            <h3 class="deal-title">Apple AirTag 4-Pack</h3>
-            <p class="deal-desc">Keep track of your keys, wallet, and luggage. The 4-pack is currently seeing a significant price drop.</p>
-            <a href="https://www.amazon.com/dp/B0932QW2JZ?tag=werewolf3788-20" target="_blank" class="buy-btn">View Deal on Amazon</a>
-        </div>
-
-        <div class="deal-box">
-            <div class="deal-category">Home Organization</div>
-            <h3 class="deal-title">Fab Totes 6-Pack Storage</h3>
-            <p class="deal-desc">Reinforced handles and large capacity. Perfect for organizing clothes, bedding, and seasonal gear.</p>
-            <a href="https://www.amazon.com/dp/B0968K6YF9?tag=werewolf3788-20" target="_blank" class="buy-btn">View Deal on Amazon</a>
-        </div>
-
-        <div class="deal-box">
-            <div class="deal-category">Fitness</div>
-            <h3 class="deal-title">Under Desk Walking Pad</h3>
-            <p class="deal-desc">Stay active while you work. Portable, quiet, and fits easily under most standing desks.</p>
-            <a href="https://www.amazon.com/dp/B0C3M7Z9P5?tag=werewolf3788-20" target="_blank" class="buy-btn">View Deal on Amazon</a>
-        </div>
-
-        <div class="deal-box">
-            <div class="deal-category">Household</div>
-            <h3 class="deal-title">KitchenClouds Fatigue Mat</h3>
-            <p class="deal-desc">Cushioned support for standing. Water-resistant, non-slip, and easy to clean for kitchen or laundry rooms.</p>
-            <a href="https://www.amazon.com/dp/B08X6R2F5B?tag=werewolf3788-20" target="_blank" class="buy-btn">View Deal on Amazon</a>
-        </div>
-
-        <div class="deal-box">
-            <div class="deal-category">Auto & Safety</div>
-            <h3 class="deal-title">Portable Car Jump Starter</h3>
-            <p class="deal-desc">A winter essential. Jump-start your vehicle without needing another car. High-capacity battery.</p>
-            <a href="https://www.amazon.com/dp/B08P5FKGRX?tag=werewolf3788-20" target="_blank" class="buy-btn">View Deal on Amazon</a>
-        </div>
-
-    </div>
 
     <div class="disclosure">
         As an Amazon Associate, I earn from qualifying purchases. Your support helps keep our local Flora and Gaming community sites running!
@@ -191,40 +55,26 @@
 </div>
 
 <script>
-    // 1. SMART BRANDING
     const host = window.location.hostname;
     let accent = "#ff9900"; 
     let title = "Werewolf's Daily Deals";
-
-    if (host.includes("supportmylocalcommunity")) {
-        accent = "#28a745"; 
-        title = "Local Community Picks";
-    } else if (host.includes("ourflora.com") && !host.includes("werewolf")) {
-        accent = "#007bff"; 
-        title = "Our Flora Daily Savings";
-    }
-
+    if (host.includes("supportmylocalcommunity")) { accent = "#28a745"; title = "Local Community Picks"; }
+    else if (host.includes("ourflora.com") && !host.includes("werewolf")) { accent = "#007bff"; title = "Our Flora Daily Savings"; }
     document.documentElement.style.setProperty('--accent', accent);
     document.getElementById('site-header').style.background = `linear-gradient(135deg, ${accent}, #444)`;
     document.getElementById('site-title').innerText = title;
 
-    // 2. HOLIDAY & NYE COUNTDOWN
     function initHolidays() {
         const now = new Date();
         const month = now.getMonth() + 1;
         const day = now.getDate();
         const hour = now.getHours();
         const banner = document.getElementById('countdown-banner');
-
         if (month === 12 && day === 31) {
             banner.style.display = "block";
-            const hourEmojis = {
-                13: "1🕐", 14: "2🕑", 15: "3🕒", 16: "4🕓", 17: "5🕒", 18: "6🕕",
-                19: "7🕖", 20: "8🕗", 21: "9🕘", 22: "10🕙", 23: "11🕚", 0: "🕛 HAPPY NEW YEAR!"
-            };
+            const hourEmojis = { 13: "1🕐", 14: "2🕑", 15: "3🕒", 16: "4🕓", 17: "5🕒", 18: "6🕕", 19: "7🕖", 20: "8🕗", 21: "9🕘", 22: "10🕙", 23: "11🕚", 0: "🕛 HAPPY NEW YEAR!" };
             if (hourEmojis[hour]) banner.innerText = "NYE Countdown: " + hourEmojis[hour];
         }
-
         let emoji = "";
         if (month === 12) emoji = "🎄";
         if (month === 10) emoji = "🎃";
@@ -241,13 +91,9 @@
         p.style.fontSize = "24px";
         p.style.transition = "transform 10s linear";
         container.appendChild(p);
-        setTimeout(() => {
-            p.style.transform = "translateY(110vh) rotate(360deg)";
-            setTimeout(() => p.remove(), 11000);
-        }, 100);
+        setTimeout(() => { p.style.transform = "translateY(110vh) rotate(360deg)"; setTimeout(() => p.remove(), 11000); }, 100);
     }
     window.onload = initHolidays;
 </script>
-
 </body>
 </html>
