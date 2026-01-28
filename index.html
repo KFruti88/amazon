@@ -1,79 +1,78 @@
 <div id="holiday-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; overflow: hidden;"></div>
+<div id="countdown-banner" style="position: fixed; top: 10px; right: 10px; background: rgba(0,0,0,0.8); color: #ff9900; padding: 10px 20px; border: 1px solid #ff9900; border-radius: 8px; font-weight: bold; display: none; z-index: 10000;"></div>
 
 <script>
 /**
- * HOLIDAY ENGINE v1.02
- * Uses werewolf3788-20 defaults
+ * HOLIDAY & NYE COUNTDOWN ENGINE v1.03
  */
-function triggerHolidays() {
+function runHolidayEngine() {
     const now = new Date();
-    const month = now.getMonth() + 1; // 1-12
+    const month = now.getMonth() + 1;
     const day = now.getDate();
-    const overlay = document.getElementById('holiday-overlay');
+    const hour = now.getHours(); // 0-23
     
-    let emoji = "";
-    let animationType = "fall"; // "fall" or "float-up"
+    // 1. CLEAR OVERLAYS
+    const overlay = document.getElementById('holiday-overlay');
+    const banner = document.getElementById('countdown-banner');
 
-    // 📅 HOLIDAY LOGIC
-    if (month === 2 && day === 2) { 
-        emoji = "🦫"; // Groundhog Day
-    } else if (month === 2 && (day >= 10 && day <= 14)) {
-        emoji = "❤️"; animationType = "float-up"; // Valentines
-    } else if (month === 5 && (day >= 25)) {
-        emoji = "🇺🇸"; // Memorial Day (Late May)
-    } else if (month === 7 && day === 4) {
-        emoji = "🎆"; // 4th of July
-    } else if (month === 9 && (day <= 7)) {
-        emoji = "🛠️"; // Labor Day (Early Sept)
-    } else if (month === 10) {
-        emoji = "🎃"; // Halloween (Whole month)
-    } else if (month === 11 && (day >= 20)) {
-        emoji = "🦃"; // Thanksgiving
-    } else if (month === 12) {
-        emoji = "❄️"; // Winter/Christmas
-    }
+    // 2. NEW YEAR'S EVE COUNTDOWN LOGIC (Dec 31st)
+    if (month === 12 && day === 31) {
+        banner.style.display = "block";
+        const hourEmojis = {
+            13: "1🕐", 14: "2🕑", 15: "3🕒", 16: "4🕓", 17: "5🕒", 18: "6🕕",
+            19: "7🕖", 20: "8🕗", 21: "9🕘", 22: "10🕙", 23: "11🕚", 0: "🕛 HAPPY NEW YEAR!"
+        };
 
-    if (emoji !== "") {
-        createHolidayParticles(emoji, animationType);
-    }
-}
-
-function createHolidayParticles(symbol, type) {
-    const container = document.getElementById('holiday-overlay');
-    const particleCount = 20;
-
-    for (let i = 0; i < particleCount; i++) {
-        const p = document.createElement('div');
-        p.innerText = symbol;
-        p.style.position = "absolute";
-        p.style.fontSize = Math.random() * 20 + 20 + "px";
-        p.style.left = Math.random() * 100 + "vw";
-        p.style.opacity = Math.random();
-        p.style.transition = `transform ${Math.random() * 5 + 5}s linear, opacity 2s`;
-        
-        // Initial Position
-        if (type === "fall") {
-            p.style.top = "-50px";
-        } else {
-            p.style.bottom = "-50px";
+        if (hour >= 13 || hour === 0) {
+            const currentEmoji = hourEmojis[hour] || "🕛";
+            banner.innerHTML = `NYE Countdown: ${currentEmoji}`;
+            // Special effect for the hour strike
+            if (now.getMinutes() < 5) {
+                spawnParticles(currentEmoji, "float-up");
+            }
         }
-
-        container.appendChild(p);
-
-        // Start Animation
-        setTimeout(() => {
-            const destination = type === "fall" ? "110vh" : "-110vh";
-            p.style.transform = `translateY(${destination}) rotate(${Math.random() * 360}deg)`;
-            
-            // Remove after animation to save memory
-            setTimeout(() => { p.remove(); }, 10000);
-        }, 100);
     }
 
-    // Keep it going
-    setTimeout(() => createHolidayParticles(symbol, type), 4000);
+    // 3. GENERAL HOLIDAY EMOJIS
+    let holidayEmoji = "";
+    let animation = "fall";
+
+    if (month === 12 && day < 31) {
+        holidayEmoji = "🎄"; // Christmas Month
+    } else if (month === 1 && day === 1) {
+        holidayEmoji = "🕛"; // New Year's Day
+    }
+
+    if (holidayEmoji !== "") {
+        spawnParticles(holidayEmoji, animation);
+    }
 }
 
-// Fire it off on load
-window.addEventListener('load', triggerHolidays);
+function spawnParticles(symbol, type) {
+    const container = document.getElementById('holiday-overlay');
+    const p = document.createElement('div');
+    p.innerText = symbol;
+    p.style.position = "absolute";
+    p.style.fontSize = "30px";
+    p.style.left = Math.random() * 100 + "vw";
+    p.style.transition = `transform 8s linear, opacity 2s`;
+    
+    if (type === "fall") {
+        p.style.top = "-50px";
+    } else {
+        p.style.bottom = "-50px";
+    }
+
+    container.appendChild(p);
+
+    setTimeout(() => {
+        const dest = type === "fall" ? "110vh" : "-110vh";
+        p.style.transform = `translateY(${dest}) rotate(360deg)`;
+        setTimeout(() => p.remove(), 8500);
+    }, 100);
+}
+
+// Check the time every minute to update countdowns
+setInterval(runHolidayEngine, 60000);
+window.addEventListener('load', runHolidayEngine);
 </script>
