@@ -72,16 +72,17 @@
 
     // 2. FETCH THE DEALS FROM THE SECOND FILE
     async function loadDeals() {
+        const fallbackMessage = "<p style='text-align:center;'>Deals are being refreshed. Check back in a few minutes!</p>";
         try {
             const response = await fetch('amazon-deals.html');
             if (response.ok) {
                 const html = await response.text();
                 document.getElementById('amazon-deals-target').innerHTML = html;
             } else {
-                document.getElementById('amazon-deals-target').innerHTML = "<p style='text-align:center;'>Deals are being refreshed. Check back in a few minutes!</p>";
+                document.getElementById('amazon-deals-target').innerHTML = fallbackMessage;
             }
         } catch (error) {
-            document.getElementById('amazon-deals-target').innerHTML = "<p style='text-align:center;'>Deals are being refreshed. Check back in a few minutes!</p>";
+            document.getElementById('amazon-deals-target').innerHTML = fallbackMessage;
         }
     }
 
