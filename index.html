@@ -1,78 +1,191 @@
-<div id="holiday-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; overflow: hidden;"></div>
-<div id="countdown-banner" style="position: fixed; top: 10px; right: 10px; background: rgba(0,0,0,0.8); color: #ff9900; padding: 10px 20px; border: 1px solid #ff9900; border-radius: 8px; font-weight: bold; display: none; z-index: 10000;"></div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Deals Hub</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            background-color: #121212;
+            color: #eee;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        /* 90% Width Standard */
+        .universal-wrapper {
+            width: 90%;
+            max-width: 1400px;
+            margin: 30px 0;
+            z-index: 10;
+        }
+
+        #site-header {
+            text-align: center;
+            padding: 40px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            background: #333; 
+        }
+
+        .deals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .deal-box {
+            background: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .product-img {
+            width: 100%;
+            height: 200px;
+            object-fit: contain;
+            background: #fff;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .buy-btn {
+            background: var(--accent, #ff9900);
+            color: #111;
+            text-decoration: none;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 6px;
+        }
+
+        #countdown-banner {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            background: #000;
+            color: var(--accent, #ff9900);
+            text-align: center;
+            padding: 10px;
+            font-weight: bold;
+            z-index: 100;
+            border-bottom: 2px solid var(--accent, #ff9900);
+            display: none;
+        }
+
+        .holiday-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 999;
+        }
+    </style>
+</head>
+<body>
+
+<div id="countdown-banner"></div>
+<div id="holiday-overlay" class="holiday-overlay"></div>
+
+<div class="universal-wrapper">
+    <div id="site-header">
+        <h1 id="site-title">Daily Deals</h1>
+        <p id="site-welcome">Support local projects with every click!</p>
+    </div>
+
+    <div class="deals-grid" id="product-grid">
+        <div class="deal-box">
+            <img src="https://m.media-amazon.com/images/I/71IIGG9bP2L._AC_SL1500_.jpg" class="product-img">
+            <h3>Portable Jump Starter</h3>
+            <p>Don't get stranded. Essential for winter driving.</p>
+            <a href="https://www.amazon.com/dp/B08P5FKGRX?tag=werewolf3788-20" target="_blank" class="buy-btn">View on Amazon</a>
+        </div>
+    </div>
+</div>
 
 <script>
-/**
- * HOLIDAY & NYE COUNTDOWN ENGINE v1.03
- */
-function runHolidayEngine() {
-    const now = new Date();
-    const month = now.getMonth() + 1;
-    const day = now.getDate();
-    const hour = now.getHours(); // 0-23
-    
-    // 1. CLEAR OVERLAYS
-    const overlay = document.getElementById('holiday-overlay');
-    const banner = document.getElementById('countdown-banner');
+    // 1. SMART BRANDING LOGIC
+    const host = window.location.hostname;
+    let accent = "#ff9900"; 
+    let title = "Werewolf's Daily Deals";
 
-    // 2. NEW YEAR'S EVE COUNTDOWN LOGIC (Dec 31st)
-    if (month === 12 && day === 31) {
-        banner.style.display = "block";
-        const hourEmojis = {
-            13: "1🕐", 14: "2🕑", 15: "3🕒", 16: "4🕓", 17: "5🕒", 18: "6🕕",
-            19: "7🕖", 20: "8🕗", 21: "9🕘", 22: "10🕙", 23: "11🕚", 0: "🕛 HAPPY NEW YEAR!"
-        };
+    if (host.includes("supportmylocalcommunity")) {
+        accent = "#28a745"; 
+        title = "Local Community Picks";
+    } else if (host.includes("ourflora.com") && !host.includes("werewolf")) {
+        accent = "#007bff"; 
+        title = "Our Flora Daily Savings";
+    }
 
-        if (hour >= 13 || hour === 0) {
-            const currentEmoji = hourEmojis[hour] || "🕛";
-            banner.innerHTML = `NYE Countdown: ${currentEmoji}`;
-            // Special effect for the hour strike
-            if (now.getMinutes() < 5) {
-                spawnParticles(currentEmoji, "float-up");
+    document.documentElement.style.setProperty('--accent', accent);
+    document.getElementById('site-header').style.background = `linear-gradient(135deg, ${accent}, #444)`;
+    document.getElementById('site-title').innerText = title;
+
+    // 2. HOLIDAY & NYE LOGIC
+    function initHolidays() {
+        const now = new Date();
+        const month = now.getMonth() + 1;
+        const day = now.getDate();
+        const hour = now.getHours();
+        const banner = document.getElementById('countdown-banner');
+
+        // NYE Hourly Countdown
+        if (month === 12 && day === 31) {
+            banner.style.display = "block";
+            const hourEmojis = {
+                13: "1🕐", 14: "2🕑", 15: "3🕒", 16: "4🕓", 17: "5🕒", 18: "6🕕",
+                19: "7🕖", 20: "8🕗", 21: "9🕘", 22: "10🕙", 23: "11🕚", 0: "🕛 HAPPY NEW YEAR!"
+            };
+            if (hourEmojis[hour]) {
+                banner.innerText = "New Year's Eve Countdown: " + hourEmojis[hour];
             }
+        }
+
+        // Floating Holiday Emojis
+        let emoji = "";
+        if (month === 12) emoji = "🎄";
+        if (month === 2 && day === 14) emoji = "❤️";
+        if (month === 10) emoji = "🎃";
+
+        if (emoji !== "") {
+            setInterval(() => createParticle(emoji), 2000);
         }
     }
 
-    // 3. GENERAL HOLIDAY EMOJIS
-    let holidayEmoji = "";
-    let animation = "fall";
-
-    if (month === 12 && day < 31) {
-        holidayEmoji = "🎄"; // Christmas Month
-    } else if (month === 1 && day === 1) {
-        holidayEmoji = "🕛"; // New Year's Day
-    }
-
-    if (holidayEmoji !== "") {
-        spawnParticles(holidayEmoji, animation);
-    }
-}
-
-function spawnParticles(symbol, type) {
-    const container = document.getElementById('holiday-overlay');
-    const p = document.createElement('div');
-    p.innerText = symbol;
-    p.style.position = "absolute";
-    p.style.fontSize = "30px";
-    p.style.left = Math.random() * 100 + "vw";
-    p.style.transition = `transform 8s linear, opacity 2s`;
-    
-    if (type === "fall") {
+    function createParticle(symbol) {
+        const container = document.getElementById('holiday-overlay');
+        const p = document.createElement('div');
+        p.innerText = symbol;
+        p.style.position = "absolute";
+        p.style.left = Math.random() * 100 + "vw";
         p.style.top = "-50px";
-    } else {
-        p.style.bottom = "-50px";
+        p.style.fontSize = "24px";
+        p.style.transition = "transform 10s linear";
+        container.appendChild(p);
+
+        setTimeout(() => {
+            p.style.transform = "translateY(110vh) rotate(360deg)";
+            setTimeout(() => p.remove(), 11000);
+        }, 100);
     }
 
-    container.appendChild(p);
-
-    setTimeout(() => {
-        const dest = type === "fall" ? "110vh" : "-110vh";
-        p.style.transform = `translateY(${dest}) rotate(360deg)`;
-        setTimeout(() => p.remove(), 8500);
-    }, 100);
-}
-
-// Check the time every minute to update countdowns
-setInterval(runHolidayEngine, 60000);
-window.addEventListener('load', runHolidayEngine);
+    // Run after page is ready
+    window.onload = initHolidays;
 </script>
+
+</body>
+</html>
