@@ -6,8 +6,13 @@ on:
     branches:
       - main
     paths:
-      - 'index.html'
-  workflow_dispatch: # Allows manual "Run now" click in GitHub Actions
+      - 'amazon.html' # Only triggers if the deals change, protecting index.html
+  workflow_dispatch: # Allows manual "Run now" click
+
+# This stops the "Canceling" error by making jobs wait their turn
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
 
 permissions:
   contents: write
@@ -26,24 +31,23 @@ jobs:
         with:
           python-version: '3.x'
 
-      # FIX: This installs the missing 'requests' module so the script doesn't crash
       - name: Install dependencies
         run: pip install requests
 
-      # Step 1: Auto-Fill the HTML with new Amazon Deals
-      - name: Auto-Fill Amazon Products
+      # Step 1: Only touches amazon.html - index.html is 100% safe
+      - name: Auto-Fill Amazon Snippet
         run: python update_deals.py
 
-      # Step 2: Generate the RSS feed based on the newly updated HTML
+      # Step 2: Generate the RSS feed using the snippet data
       - name: Update RSS Feed
         run: python generate_feed.py
 
-      # Step 3: Save everything back to GitHub
+      # Step 3: Save only the snippet and feed back to GitHub
       - name: Commit and Push changes
         run: |
-          git config --global user.name "GitHub Action Bot"
-          git config --global user.email "action@github.com"
-          git add index.html feed.xml
-          git commit -m "Automated Daily Update: Deals & RSS Feed" || echo "No changes to commit"
+          git config --local user.name "GitHub Action Bot"
+          git config --local user.email "action@github.com"
+          git add amazon.html feed.xml
+          git commit -m "Automated Daily Update: Amazon Snippet & RSS Feed" || echo "No changes to commit"
           git pull --rebase origin main
           git push
