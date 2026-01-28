@@ -1,149 +1,79 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Werewolf's Daily Deals</title>
-    <style>
-        /* Coding Standards: 90% Width & Dark Theme */
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background-color: #121212;
-            color: #eee;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .deals-wrapper {
-            width: 90%; /* Standard */
-            max-width: 1400px;
-            margin: 30px 0;
-        }
-
-        .deals-header {
-            text-align: center;
-            background: linear-gradient(135deg, #ff9900, #ff5f00);
-            color: #111;
-            padding: 40px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-        }
-
-        /* The Grid Box Setup */
-        .deals-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-        }
-
-        .deal-box {
-            background: #1e1e1e;
-            border: 1px solid #333;
-            border-radius: 12px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            transition: transform 0.2s, border-color 0.2s;
-        }
-
-        .deal-box:hover {
-            transform: translateY(-5px);
-            border-color: #ff9900;
-        }
-
-        .product-img {
-            width: 100%;
-            height: 200px;
-            object-fit: contain;
-            background: #fff; /* White bg for Amazon product contrast */
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
-
-        .deal-title {
-            font-size: 1.1em;
-            color: #ff9900;
-            margin: 0 0 10px 0;
-            height: 2.4em;
-            overflow: hidden;
-        }
-
-        .deal-desc {
-            font-size: 0.9em;
-            color: #ccc;
-            margin-bottom: 15px;
-            flex-grow: 1;
-        }
-
-        .buy-btn {
-            background: #ff9900;
-            color: #111;
-            text-decoration: none;
-            padding: 12px;
-            text-align: center;
-            font-weight: bold;
-            border-radius: 6px;
-            transition: background 0.2s;
-        }
-
-        .buy-btn:hover { background: #e68a00; }
-
-        .disclosure {
-            width: 90%;
-            font-size: 0.8em;
-            color: #777;
-            text-align: center;
-            margin-top: 40px;
-            padding: 20px;
-            border-top: 1px solid #333;
-        }
-
-        /* Mobile Stacking */
-        @media (max-width: 768px) {
-            .deals-grid { grid-template-columns: 1fr; }
-            .deals-wrapper { width: 95%; }
-        }
-    </style>
-</head>
-<body>
-
-<div class="deals-wrapper">
-    <div class="deals-header">
-        <h1>🐺 Werewolf's Hot Deals</h1>
-        <p>Support the community! Clicks activate a 24-hour cookie for anything you buy.</p>
-    </div>
-
-    <div class="deals-grid" id="main-grid">
-        
-        <div class="deal-box">
-            <img src="https://m.media-amazon.com/images/I/71IIGG9bP2L._AC_SL1500_.jpg" class="product-img" alt="Product">
-            <h3 class="deal-title">Portable Car Jump Starter</h3>
-            <p class="deal-desc">Never get stranded again. High-capacity battery for emergency starts.</p>
-            <a href="https://www.amazon.com/dp/B08P5FKGRX?tag=werewolf3788-20" target="_blank" class="buy-btn">View Details</a>
-        </div>
-        <div class="deal-box">
-            <img src="https://m.media-amazon.com/images/I/71eCGdR7nfL._AC_SL1389_.jpg" class="product-img" alt="Product">
-            <h3 class="deal-title">Emergency Thermal Blankets</h3>
-            <p class="deal-desc">Space-age Mylar reflects 90% of body heat. Essential for car kits.</p>
-            <a href="https://www.amazon.com/dp/B000G7X99O?tag=werewolf3788-20" target="_blank" class="buy-btn">View Details</a>
-        </div>
-        </div>
-
-    <div class="disclosure">
-        As an Amazon Associate, I earn from qualifying purchases. Your support helps keep <strong>werewolf.ourflora.com</strong> and <strong>supportmylocalcommunity.com</strong> running!
-    </div>
-</div>
+<div id="holiday-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; overflow: hidden;"></div>
 
 <script>
-    // Logic to ensure images and links always include your tracking
-    // version 1.01
-</script>
+/**
+ * HOLIDAY ENGINE v1.02
+ * Uses werewolf3788-20 defaults
+ */
+function triggerHolidays() {
+    const now = new Date();
+    const month = now.getMonth() + 1; // 1-12
+    const day = now.getDate();
+    const overlay = document.getElementById('holiday-overlay');
+    
+    let emoji = "";
+    let animationType = "fall"; // "fall" or "float-up"
 
-</body>
-</html>
+    // 📅 HOLIDAY LOGIC
+    if (month === 2 && day === 2) { 
+        emoji = "🦫"; // Groundhog Day
+    } else if (month === 2 && (day >= 10 && day <= 14)) {
+        emoji = "❤️"; animationType = "float-up"; // Valentines
+    } else if (month === 5 && (day >= 25)) {
+        emoji = "🇺🇸"; // Memorial Day (Late May)
+    } else if (month === 7 && day === 4) {
+        emoji = "🎆"; // 4th of July
+    } else if (month === 9 && (day <= 7)) {
+        emoji = "🛠️"; // Labor Day (Early Sept)
+    } else if (month === 10) {
+        emoji = "🎃"; // Halloween (Whole month)
+    } else if (month === 11 && (day >= 20)) {
+        emoji = "🦃"; // Thanksgiving
+    } else if (month === 12) {
+        emoji = "❄️"; // Winter/Christmas
+    }
+
+    if (emoji !== "") {
+        createHolidayParticles(emoji, animationType);
+    }
+}
+
+function createHolidayParticles(symbol, type) {
+    const container = document.getElementById('holiday-overlay');
+    const particleCount = 20;
+
+    for (let i = 0; i < particleCount; i++) {
+        const p = document.createElement('div');
+        p.innerText = symbol;
+        p.style.position = "absolute";
+        p.style.fontSize = Math.random() * 20 + 20 + "px";
+        p.style.left = Math.random() * 100 + "vw";
+        p.style.opacity = Math.random();
+        p.style.transition = `transform ${Math.random() * 5 + 5}s linear, opacity 2s`;
+        
+        // Initial Position
+        if (type === "fall") {
+            p.style.top = "-50px";
+        } else {
+            p.style.bottom = "-50px";
+        }
+
+        container.appendChild(p);
+
+        // Start Animation
+        setTimeout(() => {
+            const destination = type === "fall" ? "110vh" : "-110vh";
+            p.style.transform = `translateY(${destination}) rotate(${Math.random() * 360}deg)`;
+            
+            // Remove after animation to save memory
+            setTimeout(() => { p.remove(); }, 10000);
+        }, 100);
+    }
+
+    // Keep it going
+    setTimeout(() => createHolidayParticles(symbol, type), 4000);
+}
+
+// Fire it off on load
+window.addEventListener('load', triggerHolidays);
+</script>
