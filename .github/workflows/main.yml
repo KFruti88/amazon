@@ -26,6 +26,10 @@ jobs:
         with:
           python-version: '3.x'
 
+      # FIX: This installs the missing 'requests' module so the script doesn't crash
+      - name: Install dependencies
+        run: pip install requests
+
       # Step 1: Auto-Fill the HTML with new Amazon Deals
       - name: Auto-Fill Amazon Products
         run: python update_deals.py
