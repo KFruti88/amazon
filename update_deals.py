@@ -44,8 +44,8 @@ def update_site():
         </div>"""
 
     # 5. Perform the swap in memory
-    pattern = re.compile(r'<!-- DEALS_START -->.*?<!-- DEALS_END -->', re.DOTALL)
-    updated_content = pattern.sub(f'<!-- DEALS_START -->{grid_html}\n<!-- DEALS_END -->', original_content)
+    pattern = re.compile(r'([ \t]*)<!-- DEALS_START -->.*?<!-- DEALS_END -->', re.DOTALL)
+    updated_content = pattern.sub(lambda m: f'{m.group(1)}<!-- DEALS_START -->{grid_html}\n{m.group(1)}<!-- DEALS_END -->', original_content)
 
     # 6. FINAL PROTECTION: Verify the new content is valid
     if len(updated_content) < (len(original_content) * 0.5):
