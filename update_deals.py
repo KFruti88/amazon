@@ -25,7 +25,7 @@ def update_site():
         original_content = f.read()
 
     # 3. SAFETY CHECK: If anchors are missing, STOP IMMEDIATELY
-    if "" not in original_content or "" not in original_content:
+    if "<!-- DEALS_START -->" not in original_content or "<!-- DEALS_END -->" not in original_content:
         print("CRITICAL ERROR: Comment anchors missing. Aborting to prevent file erasure!")
         # This exit code 1 tells GitHub the job failed, so it won't push a broken file
         sys.exit(1)
@@ -35,17 +35,17 @@ def update_site():
     grid_html = ""
     for d in deals:
         grid_html += f"""
-        <div class="deal-box">
-            <div class="deal-info">
-                <h3 class="deal-title">{d['title']}</h3>
-                <p class="deal-desc">{d['desc']}</p>
-            </div>
-            <a href="https://www.amazon.com/dp/{d['asin']}?tag={TAG}" target="_blank" class="buy-btn">View on Amazon</a>
-        </div>"""
+            <div class="deal-box">
+                <div class="deal-info">
+                    <h3 class="deal-title">{d['title']}</h3>
+                    <p class="deal-desc">{d['desc']}</p>
+                </div>
+                <a href="https://www.amazon.com/dp/{d['asin']}?tag={TAG}" target="_blank" class="buy-btn">View on Amazon</a>
+            </div>"""
 
     # 5. Perform the swap in memory
-    pattern = re.compile(r'.*?', re.DOTALL)
-    updated_content = pattern.sub(f'{grid_html}\n', original_content)
+    pattern = re.compile(r'([ \t]*)<!-- DEALS_START -->.*?<!-- DEALS_END -->', re.DOTALL)
+    updated_content = pattern.sub(lambda m: f'{m.group(1)}<!-- DEALS_START -->{grid_html}\n{m.group(1)}<!-- DEALS_END -->', original_content)
 
     # 6. FINAL PROTECTION: Verify the new content is valid
     if len(updated_content) < (len(original_content) * 0.5):
