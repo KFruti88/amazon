@@ -35,13 +35,13 @@ def update_site():
     grid_html = ""
     for d in deals:
         grid_html += f"""
-        <div class="deal-box">
-            <div class="deal-info">
-                <h3 class="deal-title">{d['title']}</h3>
-                <p class="deal-desc">{d['desc']}</p>
-            </div>
-            <a href="https://www.amazon.com/dp/{d['asin']}?tag={TAG}" target="_blank" class="buy-btn">View on Amazon</a>
-        </div>"""
+            <div class="deal-box">
+                <div class="deal-info">
+                    <h3 class="deal-title">{d['title']}</h3>
+                    <p class="deal-desc">{d['desc']}</p>
+                </div>
+                <a href="https://www.amazon.com/dp/{d['asin']}?tag={TAG}" target="_blank" class="buy-btn">View on Amazon</a>
+            </div>"""
 
     # 5. Perform the swap in memory
     pattern = re.compile(r'([ \t]*)<!-- DEALS_START -->.*?<!-- DEALS_END -->', re.DOTALL)
