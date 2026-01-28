@@ -1,47 +1,23 @@
 import os
 import re
 
-TAG = "werewolf3788-20"
-HTML_FILE = "index.html"
+# Safely update index.html
+def safe_update_html(new_content):
+    with open('index.html', 'r', encoding='utf-8') as f:
+        full_html = f.read()
 
-def get_deals():
-    return [
-        {"title": "13-Piece Knife Set", "asin": "B09NVNCSR3", "desc": "60% Off Clearance. High-carbon stainless steel."},
-        {"title": "Apple AirTag 4-Pack", "asin": "B0932QW2JZ", "desc": "Never lose your gear again. Limited time discount."},
-        {"title": "Under Desk Walking Pad", "asin": "B0C3M7Z9P5", "desc": "90% Price Drop. Stay active while working from home."},
-        {"title": "Portable Car Jump Starter", "asin": "B08P5FKGRX", "desc": "Winter Essential. 2500A Peak emergency power."}
-    ]
-
-def update_html():
-    if not os.path.exists(HTML_FILE):
+    # Safety Check 1: Ensure anchors exist
+    if "" not in full_html or "" not in full_html:
+        print("Safety Triggered: Comment anchors missing. Skipping update.")
         return
 
-    with open(HTML_FILE, 'r', encoding='utf-8') as f:
-        content = f.read()
-
-    # Create Sideways/Glossy HTML
-    deals = get_deals()
-    new_html = "\n"
-    for d in deals:
-        new_html += f"""        <div class="deal-box">
-            <div class="deal-info">
-                <h3 class="deal-title">{d['title']}</h3>
-                <p class="deal-desc">{d['desc']}</p>
-            </div>
-            <a href="https://www.amazon.com/dp/{d['asin']}?tag={TAG}" target="_blank" class="buy-btn">View on Amazon</a>
-        </div>\n"""
-
-    # Fail-safe check for anchors
-    if "" not in content or "" not in content:
-        print("ERROR: Anchors missing! File was not changed to prevent erasing data.")
+    # Safety Check 2: Don't replace with nothing
+    if not new_content.strip():
+        print("Safety Triggered: New content is empty. Skipping update.")
         return
 
     pattern = re.compile(r'.*?', re.DOTALL)
-    updated = pattern.sub(f'{new_html}        ', content)
+    updated_html = pattern.sub(f'\n{new_content}\n', full_html)
 
-    with open(HTML_FILE, 'w', encoding='utf-8') as f:
-        f.write(updated)
-    print("Grid updated successfully!")
-
-if __name__ == "__main__":
-    update_html()
+    with open('index.html', 'w', encoding='utf-8') as f:
+        f.write(updated_html)
