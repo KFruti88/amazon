@@ -9,12 +9,12 @@
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
             margin: 0;
-            background: #121212;
+            background: #121212; /* Default */
             color: #eee;
             display: flex;
             flex-direction: column;
             align-items: center;
-            transition: background 2s ease;
+            transition: background 3s ease-in-out; /* Smooth wallpaper shift */
             min-height: 100vh;
         }
         .universal-wrapper { width: 90%; max-width: 1200px; margin: 30px 0; }
@@ -25,30 +25,29 @@
         }
         .deals-grid { display: flex; flex-direction: column; gap: 20px; }
         
-        /* Glossy Sideways Card */
+        /* Glossy Horizontal Cards */
         .deal-box {
             display: flex; flex-direction: row; align-items: center;
-            background: rgba(255, 255, 255, 0.07); backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 15px;
+            background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 15px;
             padding: 25px; transition: 0.3s ease;
         }
-        .deal-box:hover { transform: scale(1.01); border-color: var(--accent, #ff9900); }
-        .deal-info { flex: 1; padding-right: 20px; }
+        .deal-box:hover { transform: translateY(-3px); border-color: var(--accent, #ff9900); }
+        .deal-info { flex: 1; padding-right: 25px; }
         .deal-title { font-size: 1.4rem; margin: 0 0 10px 0; color: #fff; }
         .buy-btn {
             background: var(--accent, #ff9900); color: #111; text-decoration: none;
-            padding: 15px 30px; font-weight: bold; border-radius: 10px; white-space: nowrap;
+            padding: 15px 35px; font-weight: bold; border-radius: 10px; white-space: nowrap;
         }
         @media (max-width: 768px) { .deal-box { flex-direction: column; text-align: center; } .deal-info { padding: 0 0 20px 0; } }
     </style>
 </head>
 <body>
-<div id="holiday-overlay" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:999;"></div>
 
 <div class="universal-wrapper">
     <div id="site-header">
         <h1 id="site-title">Amazon Clearance Picks</h1>
-        <p id="weather-status">Loading Gainesville Weather...</p>
+        <p>Top-rated deals updated daily. Every click supports our community.</p>
     </div>
 
     <div class="deals-grid" id="product-grid">
@@ -56,27 +55,30 @@
 </div>
 
 <script>
-    // Weather & Branding Logic
-    async function updateWeather() {
+    // STEALTH WEATHER WALLPAPER (Gainesville 32609)
+    async function updateWallpaper() {
         try {
             const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=29.6516&longitude=-82.3248&current_weather=true');
             const data = await res.json();
             const temp = data.current_weather.temperature;
             const code = data.current_weather.weathercode;
-            let bg = "#121212"; 
-            if (code >= 1) bg = "#1e3a5f"; // Cloudy
-            if (code >= 51) bg = "#2c3e50"; // Rain
-            if (temp > 85) bg = "#4a2c2c"; // Hot
-            document.body.style.background = `linear-gradient(135deg, ${bg}, #121212)`;
-            document.getElementById('weather-status').innerText = `Gainesville: ${temp}°C | Status Code: ${code}`;
-        } catch (e) { console.log("Weather offline"); }
+            
+            let topColor = "#121212"; 
+            if (code >= 1 && code <= 3) topColor = "#1e3a5f"; // Cloudy/Deep Blue
+            if (code >= 51) topColor = "#1a2a3a"; // Rain/Steel
+            if (temp > 85) topColor = "#3e1f1f"; // Hot/Deep Red
+
+            document.body.style.background = `linear-gradient(180deg, ${topColor} 0%, #000000 100%)`;
+        } catch (e) { console.log("Weather server busy"); }
     }
+    
     const host = window.location.hostname;
     let accent = "#ff9900"; 
     if (host.includes("supportmylocalcommunity")) accent = "#28a745";
     else if (host.includes("ourflora.com")) accent = "#007bff";
     document.documentElement.style.setProperty('--accent', accent);
-    updateWeather();
+    
+    updateWallpaper();
 </script>
 </body>
 </html>
