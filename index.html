@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Community Deals Hub</title>
+    <title>Community Deals Hub - Lead Developer Werewolf3788</title>
     <style>
+        /* CSS Standards: Mobile Responsive & Centered */
         * { box-sizing: border-box; }
         
         body {
@@ -21,7 +22,7 @@
         /* Mandatory Centered Wrapper for Lead Developer Werewolf3788 */
         #wp-custom-wrapper {
             width: 90%; 
-            max-width: 1000px;
+            max-width: 1200px; /* Increased max-width for side-by-side layout */
             margin: 20px auto;
             background: transparent;
             color: #eee;
@@ -36,21 +37,32 @@
             backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .deals-grid { display: flex; flex-direction: column; gap: 20px; width: 100%; }
+        /* GRID LAYOUT: Side-by-Side */
+        .deals-grid { 
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); /* Side by side on desktop */
+            gap: 25px; 
+            width: 100%; 
+        }
         
         .deal-box {
-            display: flex; flex-direction: row; align-items: center;
-            background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 15px;
-            padding: 20px; transition: 0.4s ease; width: 100%;
+            display: flex; 
+            flex-direction: column; /* Vertical layout for grid items */
+            align-items: center;
+            background: rgba(255, 255, 255, 0.08); 
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.12); 
+            border-radius: 15px;
+            padding: 20px; 
+            transition: 0.4s ease;
+            text-align: center;
         }
 
         /* --- DYNAMIC MODE HIGHLIGHTS --- */
 
-        /* COD: Digital Glitch Border */
+        /* COD: Digital Glitch */
         body.cod-mode .deal-box.match-highlight { 
             border: 2px solid #9ef01a; 
-            background: rgba(158, 240, 26, 0.1);
             animation: glitchBorder 1.5s infinite;
         }
         @keyframes glitchBorder {
@@ -59,30 +71,27 @@
             100% { box-shadow: 0 0 10px #9ef01a; }
         }
 
-        /* WOT: Steel Armor Glow */
-        body.wot-mode .deal-box.match-highlight { border: 2px solid #8b9467; box-shadow: 0 0 20px rgba(139, 148, 103, 0.5); }
-
-        /* SWAT: Tactical Strobe */
-        body.swat-mode .deal-box.match-highlight { animation: swatStrobe 0.5s infinite alternate; }
-        @keyframes swatStrobe {
-            0% { border-color: #1a237e; box-shadow: 0 0 15px rgba(26, 35, 126, 0.7); }
-            100% { border-color: #d32f2f; box-shadow: 0 0 10px rgba(211, 47, 47, 0.5); }
-        }
-
         /* Racing: Police Flash */
-        body.racing-mode .deal-box.match-highlight { animation: policeFlash 0.8s infinite alternate; }
+        body.racing-mode .deal-box.match-highlight { animation: policeFlash 0.8s infinite alternate; border-width: 2px; }
         @keyframes policeFlash {
             0% { border-color: #ff0000; box-shadow: 0 0 15px rgba(255, 0, 0, 0.6); }
             100% { border-color: #0000ff; box-shadow: 0 0 15px rgba(0, 0, 255, 0.6); }
         }
 
-        /* Standard Game Highlights */
+        /* SWAT: Tactical Strobe */
+        body.swat-mode .deal-box.match-highlight { animation: swatStrobe 0.5s infinite alternate; border-width: 2px; }
+        @keyframes swatStrobe {
+            0% { border-color: #1a237e; box-shadow: 0 0 15px rgba(26, 35, 126, 0.7); }
+            100% { border-color: #d32f2f; box-shadow: 0 0 10px rgba(211, 47, 47, 0.5); }
+        }
+
+        /* Other Mode Highlighting */
+        body.wot-mode .deal-box.match-highlight { border: 2px solid #8b9467; box-shadow: 0 0 20px rgba(139, 148, 103, 0.5); }
         body.farming-mode .deal-box.match-highlight { border: 2px solid #ffde00; box-shadow: 0 0 20px #ffde0066; }
         body.hunting-mode .deal-box.match-highlight { border: 2px solid #355e3b; box-shadow: 0 0 20px #355e3b66; }
         body.fishing-mode .deal-box.match-highlight { border: 2px solid #0077be; box-shadow: 0 0 20px #0077be66; }
 
         /* --- DYNAMIC THEMES & CURSORS --- */
-
         body.cod-mode { background: linear-gradient(180deg, #0a0f02 0%, #000 100%); cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><circle cx="16" cy="16" r="2" fill="%23ff0000"/><circle cx="16" cy="16" r="14" stroke="%239ef01a" stroke-width="1" fill="none"/></svg>'), auto; }
         body.wot-mode { background: linear-gradient(180deg, #3d4432 0%, #000 100%); cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><circle cx="16" cy="16" r="14" stroke="%238b9467" stroke-width="2" fill="none"/><line x1="16" y1="2" x2="16" y2="30" stroke="%238b9467"/><line x1="2" y1="16" x2="30" y2="16" stroke="%238b9467"/></svg>'), auto; }
         body.swat-mode { background: linear-gradient(180deg, #0d1117 0%, #000 100%); cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><circle cx="16" cy="16" r="2" fill="%23ff0000"/><circle cx="16" cy="16" r="14" stroke="%23333" stroke-width="1" fill="none"/></svg>'), auto; }
@@ -94,12 +103,47 @@
 
         .game-pop { position: fixed; font-size: 3rem; opacity: 0; transition: opacity 1s; pointer-events: none; z-index: 1; }
 
-        .deal-image-container { width: 140px; aspect-ratio: 1/1; margin-right: 20px; flex-shrink: 0; border-radius: 10px; background: #fff; display: flex; align-items: center; justify-content: center; padding: 10px; overflow: hidden; }
+        .deal-image-container { 
+            width: 100%; 
+            max-width: 220px; 
+            aspect-ratio: 1/1; 
+            margin-bottom: 15px; 
+            border-radius: 10px; 
+            background: #fff; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            padding: 15px; 
+            overflow: hidden; 
+        }
         .deal-image-container img { width: 100%; height: 100%; object-fit: contain; }
-        .deal-info { flex: 1; padding-right: 20px; }
-        .buy-btn { background: #ff9900; color: #111; text-decoration: none; padding: 12px 25px; font-weight: bold; border-radius: 8px; white-space: nowrap; }
+        
+        .deal-info { width: 100%; margin-bottom: 15px; }
+        .deal-title { font-size: 1.1rem; margin: 0 0 10px 0; color: #fff; font-weight: bold; }
+        .deal-desc { font-size: 0.9rem; color: #ccc; margin: 0; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+        
+        .buy-btn { 
+            background: #ff9900; 
+            color: #111; 
+            text-decoration: none; 
+            padding: 12px 20px; 
+            font-weight: bold; 
+            border-radius: 8px; 
+            width: 100%; 
+            transition: 0.2s;
+        }
+        .buy-btn:hover { background: #e68a00; }
 
-        @media (max-width: 768px) { .deal-box { flex-direction: column; text-align: center; } .deal-image-container { margin: 0 0 20px 0; width: 180px; height: 180px; } .buy-btn { width: 100%; margin-top: 10px; } }
+        /* Responsive Breakpoints */
+        @media (max-width: 900px) {
+            .deals-grid { gap: 15px; }
+        }
+
+        @media (max-width: 650px) { 
+            .deals-grid { grid-template-columns: 1fr; } /* 1 column on mobile */
+            .deal-box { padding: 25px 20px; }
+            .deal-image-container { max-width: 250px; }
+        }
     </style>
 </head>
 <body id="main-body">
@@ -118,6 +162,7 @@
     const TWITCH_USER = "Werewolf3788"; 
     const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTFygWPIyqmgu02ImqUERdgBLcQ5jPSEgxQuqumbiKOVe4YX7bzawxLBGEi7okVKlak9JTWDvb9bUcf/pub?gid=0&single=true&output=csv";
 
+    // 1. Randomized Visual Pop-ups
     function spawnEquipment() {
         const body = document.body;
         let equipment = [];
@@ -137,13 +182,14 @@
         setTimeout(() => el.remove(), 4500);
     }
 
+    // 2. Twitch API Mode Logic (Always Active)
     async function checkTwitchMode() {
         try {
             const res = await fetch(`https://decapi.me/twitch/game/${TWITCH_USER}`);
             const game = (await res.text()).toLowerCase();
             const body = document.getElementById('main-body');
             const status = document.getElementById('live-status');
-            body.className = '';
+            body.className = ''; 
 
             if (game.includes("call of duty") || game.includes("warzone") || game.includes("mw3")) {
                 body.classList.add("cod-mode");
@@ -156,7 +202,7 @@
             } else if (game.includes("ready or not")) {
                 body.classList.add("swat-mode");
                 status.innerHTML = "🛡️ SWAT MODE: Deployment Active";
-            } else if (game.includes("need for speed") || game.includes("racing")) {
+            } else if (game.includes("need for speed") || game.includes("racing") || game.includes("driving")) {
                 body.classList.add("racing-mode");
                 status.innerHTML = `🏎️ RACING MODE: ${game.toUpperCase()}`;
             } else if (game.includes("farming") || game.includes("simulator")) {
@@ -175,23 +221,34 @@
         } catch (e) { status.innerHTML = "Amazon Affiliate Hub"; }
     }
 
+    // 3. Inventory Loading & Shuffling
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
     async function loadDeals() {
         try {
             const response = await fetch(SHEET_URL);
             const csvData = await response.text();
             const rows = csvData.split('\n').filter(r => r.trim() !== "").slice(1);
+            const shuffledRows = shuffleArray([...rows]);
+            
             let htmlContent = "";
             const keywords = {
                 cod: ["headset", "controller", "fps", "gaming mouse", "monitor", "mic"],
                 wot: ["tank", "armor", "steel", "radio", "camouflage", "model"],
-                swat: ["tactical", "vest", "helmet", "boots", "flashlight"],
+                swat: ["tactical", "swat", "vest", "helmet", "boots", "flashlight"],
                 race: ["racing", "car", "speed", "tire", "engine"],
-                farm: ["farm", "tractor", "supply", "almanac"],
+                farm: ["farm", "tractor", "supply", "almanac", "harvest"],
                 hunt: ["hunting", "ammo", "gun", "camouflage"],
                 fish: ["fishing", "angler", "boat"]
             };
 
-            rows.forEach(row => {
+            shuffledRows.forEach(row => {
                 const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                 if (cols.length >= 3) {
                     let title = cols[0].replace(/"/g, "").trim();
@@ -227,6 +284,7 @@
     window.onload = async () => {
         await checkTwitchMode();
         loadDeals();
+        setInterval(checkTwitchMode, 300000);
     };
 </script>
 </body>
