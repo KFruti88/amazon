@@ -22,7 +22,7 @@
         /* Mandatory Centered Wrapper for Lead Developer Werewolf3788 */
         #wp-custom-wrapper {
             width: 90%; 
-            max-width: 1200px; /* Increased max-width for side-by-side layout */
+            max-width: 1200px; 
             margin: 20px auto;
             background: transparent;
             color: #eee;
@@ -40,14 +40,14 @@
         /* GRID LAYOUT: Side-by-Side */
         .deals-grid { 
             display: grid; 
-            grid-template-columns: repeat(2, 1fr); /* Side by side on desktop */
+            grid-template-columns: repeat(2, 1fr); 
             gap: 25px; 
             width: 100%; 
         }
         
         .deal-box {
             display: flex; 
-            flex-direction: column; /* Vertical layout for grid items */
+            flex-direction: column; 
             align-items: center;
             background: rgba(255, 255, 255, 0.08); 
             backdrop-filter: blur(15px);
@@ -71,22 +71,24 @@
             100% { box-shadow: 0 0 10px #9ef01a; }
         }
 
-        /* Racing: Police Flash */
-        body.racing-mode .deal-box.match-highlight { animation: policeFlash 0.8s infinite alternate; border-width: 2px; }
-        @keyframes policeFlash {
-            0% { border-color: #ff0000; box-shadow: 0 0 15px rgba(255, 0, 0, 0.6); }
-            100% { border-color: #0000ff; box-shadow: 0 0 15px rgba(0, 0, 255, 0.6); }
-        }
+        /* WOT: Steel Armor Glow */
+        body.wot-mode .deal-box.match-highlight { border: 2px solid #8b9467; box-shadow: 0 0 20px rgba(139, 148, 103, 0.5); }
 
         /* SWAT: Tactical Strobe */
-        body.swat-mode .deal-box.match-highlight { animation: swatStrobe 0.5s infinite alternate; border-width: 2px; }
+        body.swat-mode .deal-box.match-highlight { animation: swatStrobe 0.5s infinite alternate; }
         @keyframes swatStrobe {
             0% { border-color: #1a237e; box-shadow: 0 0 15px rgba(26, 35, 126, 0.7); }
             100% { border-color: #d32f2f; box-shadow: 0 0 10px rgba(211, 47, 47, 0.5); }
         }
 
-        /* Other Mode Highlighting */
-        body.wot-mode .deal-box.match-highlight { border: 2px solid #8b9467; box-shadow: 0 0 20px rgba(139, 148, 103, 0.5); }
+        /* Racing: Police Flash */
+        body.racing-mode .deal-box.match-highlight { animation: policeFlash 0.8s infinite alternate; }
+        @keyframes policeFlash {
+            0% { border-color: #ff0000; box-shadow: 0 0 15px rgba(255, 0, 0, 0.6); }
+            100% { border-color: #0000ff; box-shadow: 0 0 15px rgba(0, 0, 255, 0.6); }
+        }
+
+        /* Standard Game Highlights */
         body.farming-mode .deal-box.match-highlight { border: 2px solid #ffde00; box-shadow: 0 0 20px #ffde0066; }
         body.hunting-mode .deal-box.match-highlight { border: 2px solid #355e3b; box-shadow: 0 0 20px #355e3b66; }
         body.fishing-mode .deal-box.match-highlight { border: 2px solid #0077be; box-shadow: 0 0 20px #0077be66; }
@@ -99,9 +101,17 @@
         body.farming-mode { background: linear-gradient(180deg, #367c2b 0%, #1a3a16 100%); cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><text x="0" y="24" font-size="24">🚜</text></svg>'), auto; }
         body.farming-mode::before { content: ""; position: fixed; bottom: 0; left: 0; width: 100%; height: 180px; background: url('https://www.transparenttextures.com/patterns/grass.png'); opacity: 0.25; pointer-events: none; }
         body.hunting-mode { background: linear-gradient(180deg, #1b3022 0%, #000 100%); cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><circle cx="16" cy="16" r="12" stroke="%23355e3b" stroke-width="1" fill="none"><animate attributeName="r" values="8;12;8" dur="2s" repeatCount="indefinite" /></circle><line x1="16" y1="2" x2="16" y2="30" stroke="%23355e3b"/><line x1="2" y1="16" x2="30" y2="16" stroke="%23355e3b"/></svg>'), auto; }
-        body.fishing-mode { background: linear-gradient(180deg, #001f3f 0%, #000 100%); cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><circle cx="16" cy="16" r="10" stroke="%230077be" stroke-width="2" fill="none" opacity="0.6"><animate attributeName="r" from="10" to="15" dur="1s" repeatCount="indefinite" /></circle></svg>'), auto; }
+        body.fishing-mode { background: linear-gradient(180deg, #001f3f 0%, #000 100%); cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><circle cx="16" cy="16" r="10" stroke="%230077be" stroke-width="2" fill="none" opacity="0.6"><animate attributeName="r" from="10" to="15" dur="1s" repeatCount="indefinite" /><animate attributeName="opacity" from="0.6" to="0" dur="1s" repeatCount="indefinite" /></circle></svg>'), auto; }
 
-        .game-pop { position: fixed; font-size: 3rem; opacity: 0; transition: opacity 1s; pointer-events: none; z-index: 1; }
+        /* OVERLAY ICONS: Higher z-index to show above content */
+        .game-pop { 
+            position: fixed; 
+            font-size: 3rem; 
+            opacity: 0; 
+            transition: opacity 1s; 
+            pointer-events: none; 
+            z-index: 9999; /* Changed to show above everything */
+        }
 
         .deal-image-container { 
             width: 100%; 
@@ -134,13 +144,12 @@
         }
         .buy-btn:hover { background: #e68a00; }
 
-        /* Responsive Breakpoints */
         @media (max-width: 900px) {
             .deals-grid { gap: 15px; }
         }
 
         @media (max-width: 650px) { 
-            .deals-grid { grid-template-columns: 1fr; } /* 1 column on mobile */
+            .deals-grid { grid-template-columns: 1fr; }
             .deal-box { padding: 25px 20px; }
             .deal-image-container { max-width: 250px; }
         }
@@ -161,67 +170,77 @@
 <script>
     const TWITCH_USER = "Werewolf3788"; 
     const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTFygWPIyqmgu02ImqUERdgBLcQ5jPSEgxQuqumbiKOVe4YX7bzawxLBGEi7okVKlak9JTWDvb9bUcf/pub?gid=0&single=true&output=csv";
+    
+    let currentPlayedGame = ""; 
 
-    // 1. Randomized Visual Pop-ups
     function spawnEquipment() {
         const body = document.body;
         let equipment = [];
+        
+        // Define icons for every mode
         if (body.classList.contains('farming-mode')) equipment = ['🚜', '🌾', '🌱', '🌽', '🌻'];
         if (body.classList.contains('wot-mode')) equipment = ['🛡️', '⚙️', '📻', '🛠️', '🚛'];
         if (body.classList.contains('cod-mode')) equipment = ['🎧', '🎮', '🔋', '📦', '🎯'];
+        if (body.classList.contains('swat-mode')) equipment = ['🛡️', '🔦', '📻', '👞', '🚨'];
+        if (body.classList.contains('racing-mode')) equipment = ['🏎️', '🏁', '🚦', '🔧', '⛽'];
+        if (body.classList.contains('hunting-mode')) equipment = ['🏹', '🦌', '🌲', '🔭', '🏕️'];
+        if (body.classList.contains('fishing-mode')) equipment = ['🎣', '🐟', '🛶', '⚓', '🌊'];
         
         if (equipment.length === 0) return;
+        
         const el = document.createElement('div');
         el.className = 'game-pop';
         el.innerText = equipment[Math.floor(Math.random() * equipment.length)];
         el.style.left = Math.random() * 90 + 'vw';
         el.style.top = Math.random() * 90 + 'vh';
         document.body.appendChild(el);
+        
         setTimeout(() => el.style.opacity = '0.4', 100);
         setTimeout(() => el.style.opacity = '0', 3000);
         setTimeout(() => el.remove(), 4500);
     }
 
-    // 2. Twitch API Mode Logic (Always Active)
     async function checkTwitchMode() {
         try {
             const res = await fetch(`https://decapi.me/twitch/game/${TWITCH_USER}`);
-            const game = (await res.text()).toLowerCase();
+            const game = (await res.text()).trim();
+            currentPlayedGame = game; 
+            const gameLower = game.toLowerCase();
             const body = document.getElementById('main-body');
             const status = document.getElementById('live-status');
+            
+            // Clear existing intervals if necessary (optional, browser handles many timers fine)
             body.className = ''; 
 
-            if (game.includes("call of duty") || game.includes("warzone") || game.includes("mw3")) {
+            if (gameLower.includes("call of duty") || gameLower.includes("warzone") || gameLower.includes("mw3")) {
                 body.classList.add("cod-mode");
-                status.innerHTML = "🔫 COD MODE: Combat Advantage Active";
-                setInterval(spawnEquipment, 5000);
-            } else if (game.includes("world of tanks")) {
+                status.innerHTML = `🔫 COD MODE: ${game.toUpperCase()}`;
+            } else if (gameLower.includes("world of tanks")) {
                 body.classList.add("wot-mode");
-                status.innerHTML = "🛡️ WORLD OF TANKS: Tactical Steel Active";
-                setInterval(spawnEquipment, 5000);
-            } else if (game.includes("ready or not")) {
+                status.innerHTML = `🛡️ WORLD OF TANKS: ${game.toUpperCase()}`;
+            } else if (gameLower.includes("ready or not")) {
                 body.classList.add("swat-mode");
-                status.innerHTML = "🛡️ SWAT MODE: Deployment Active";
-            } else if (game.includes("need for speed") || game.includes("racing") || game.includes("driving")) {
+                status.innerHTML = `🛡️ SWAT MODE: ${game.toUpperCase()}`;
+            } else if (gameLower.includes("need for speed") || gameLower.includes("racing") || gameLower.includes("driving")) {
                 body.classList.add("racing-mode");
                 status.innerHTML = `🏎️ RACING MODE: ${game.toUpperCase()}`;
-            } else if (game.includes("farming") || game.includes("simulator")) {
+            } else if (gameLower.includes("farming") || gameLower.includes("simulator")) {
                 body.classList.add("farming-mode");
                 status.innerHTML = `🚜 FARMING MODE: ${game.toUpperCase()}`;
-                setInterval(spawnEquipment, 5000);
-            } else if (game.includes("angler")) {
+            } else if (gameLower.includes("angler")) {
                 body.classList.add("fishing-mode");
-                status.innerHTML = "🎣 FISHING MODE Active";
-            } else if (game.includes("hunter") || game.includes("hunting")) {
+                status.innerHTML = `🎣 FISHING: ${game.toUpperCase()}`;
+            } else if (gameLower.includes("hunter") || gameLower.includes("hunting")) {
                 body.classList.add("hunting-mode");
-                status.innerHTML = "🎯 HUNTING MODE Active";
+                status.innerHTML = `🎯 HUNTING: ${game.toUpperCase()}`;
             } else {
                 status.innerHTML = "Real-Time Community Deals";
             }
+            
+            loadDeals();
         } catch (e) { status.innerHTML = "Amazon Affiliate Hub"; }
     }
 
-    // 3. Inventory Loading & Shuffling
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -248,6 +267,8 @@
                 fish: ["fishing", "angler", "boat"]
             };
 
+            const activeGameLower = currentPlayedGame.toLowerCase();
+
             shuffledRows.forEach(row => {
                 const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                 if (cols.length >= 3) {
@@ -261,13 +282,17 @@
                     let isMatch = false;
                     const body = document.getElementById('main-body');
                     
-                    if (body.classList.contains('cod-mode')) isMatch = keywords.cod.some(k => content.includes(k));
-                    if (body.classList.contains('wot-mode')) isMatch = keywords.wot.some(k => content.includes(k));
-                    if (body.classList.contains('swat-mode')) isMatch = keywords.swat.some(k => content.includes(k));
-                    if (body.classList.contains('racing-mode')) isMatch = keywords.race.some(k => content.includes(k));
-                    if (body.classList.contains('farming-mode')) isMatch = keywords.farm.some(k => content.includes(k));
-                    if (body.classList.contains('hunting-mode')) isMatch = keywords.hunt.some(k => content.includes(k));
-                    if (body.classList.contains('fishing-mode')) isMatch = keywords.fish.some(k => content.includes(k));
+                    if (activeGameLower && content.includes(activeGameLower)) {
+                        isMatch = true;
+                    } else {
+                        if (body.classList.contains('cod-mode')) isMatch = keywords.cod.some(k => content.includes(k));
+                        if (body.classList.contains('wot-mode')) isMatch = keywords.wot.some(k => content.includes(k));
+                        if (body.classList.contains('swat-mode')) isMatch = keywords.swat.some(k => content.includes(k));
+                        if (body.classList.contains('racing-mode')) isMatch = keywords.race.some(k => content.includes(k));
+                        if (body.classList.contains('farming-mode')) isMatch = keywords.farm.some(k => content.includes(k));
+                        if (body.classList.contains('hunting-mode')) isMatch = keywords.hunt.some(k => content.includes(k));
+                        if (body.classList.contains('fishing-mode')) isMatch = keywords.fish.some(k => content.includes(k));
+                    }
 
                     let finalUrl = url.includes('?') ? `${url}&tag=${tag}` : `${url}?tag=${tag}`;
                     htmlContent += `<div class="deal-box ${isMatch ? 'match-highlight' : ''}">
@@ -283,7 +308,8 @@
 
     window.onload = async () => {
         await checkTwitchMode();
-        loadDeals();
+        // Start the icon spawning loop
+        setInterval(spawnEquipment, 5000);
         setInterval(checkTwitchMode, 300000);
     };
 </script>
