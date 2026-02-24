@@ -17,7 +17,12 @@
             transition: background 3s ease-in-out;
             min-height: 100vh;
         }
-        .universal-wrapper { width: 90%; max-width: 1200px; margin: 30px 0; }
+        #wp-custom-wrapper {
+            width: 90%;
+            max-width: 1200px;
+            margin: 30px 0;
+            background: transparent;
+        }
         #site-header {
             text-align: center; padding: 40px; border-radius: 20px; margin-bottom: 30px;
             background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px);
@@ -25,7 +30,6 @@
         }
         .deals-grid { display: flex; flex-direction: column; gap: 20px; }
         
-        /* Styles for the boxes that come from amazon.html */
         .deal-box {
             display: flex; flex-direction: row; align-items: center;
             background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(15px);
@@ -35,15 +39,22 @@
         .deal-box:hover { transform: translateY(-3px); border-color: #ff9900; }
         .deal-info { flex: 1; padding-right: 25px; }
         .deal-title { font-size: 1.4rem; margin: 0 0 10px 0; color: #fff; }
+        .deal-desc { font-size: 0.95rem; color: #ccc; margin-bottom: 15px; }
+        
         .buy-btn {
             background: #ff9900; color: #111; text-decoration: none;
             padding: 15px 35px; font-weight: bold; border-radius: 10px; white-space: nowrap;
         }
-        @media (max-width: 768px) { .deal-box { flex-direction: column; text-align: center; } .deal-info { padding: 0 0 20px 0; } }
+        
+        @media (max-width: 768px) { 
+            .deal-box { flex-direction: column; text-align: center; } 
+            .deal-info { padding: 0 0 20px 0; } 
+        }
     </style>
 </head>
 <body>
-<div class="universal-wrapper">
+
+<div id="wp-custom-wrapper">
     <div id="site-header">
         <h1>Amazon Clearance Picks</h1>
         <p>Gainesville 32609 Real-Time Updates</p>
@@ -55,7 +66,10 @@
 </div>
 
 <script>
-    // 1. Wallpaper Logic
+    const AFFILIATE_ID = "Werewolf3788-20";
+    const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTFygWPIyqmgu02ImqUERdgBLcQ5jPSEgxQuqumbiKOVe4YX7bzawxLBGEi7okVKlak9JTWDvb9bUcf/pub?gid=0&single=true&output=csv";
+
+    // 1. Wallpaper Logic (Weather-based)
     async function updateWallpaper() {
         try {
             const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=29.6516&longitude=-82.3248&current_weather=true');
@@ -70,16 +84,47 @@
         } catch (e) { console.log("Weather error"); }
     }
 
-    // 2. FETCH THE DEALS FROM THE SECOND FILE
+    // 2. Fetch and Parse Google Sheet CSV
     async function loadDeals() {
         try {
-            const response = await fetch('amazon.html');
-            if (response.ok) {
-                const html = await response.text();
-                document.getElementById('amazon-deals-target').innerHTML = html;
-            }
+            const response = await fetch(SHEET_URL);
+            const csvData = await response.text();
+            
+            // Split CSV into rows and skip the header
+            const rows = csvData.split('\n').slice(1);
+            let htmlContent = "";
+
+            rows.forEach(row => {
+                // Basic CSV split (handles simple columns: Title, Description, URL)
+                const columns = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                
+                if (columns.length >= 3) {
+                    let title = columns[0].replace(/"/g, "");
+                    let desc = columns[1].replace(/"/g, "");
+                    let rawUrl = columns[2].trim().replace(/"/g, "");
+
+                    // Auto-apply Affiliate ID
+                    let affiliateUrl = rawUrl.includes('?') 
+                        ? `${rawUrl}&tag=${AFFILIATE_ID}` 
+                        : `${rawUrl}?tag=${AFFILIATE_ID}`;
+
+                    htmlContent += `
+                        <div class="deal-box">
+                            <div class="deal-info">
+                                <h2 class="deal-title">${title}</h2>
+                                <p class="deal-desc">${desc}</p>
+                            </div>
+                            <a href="${affiliateUrl}" target="_blank" class="buy-btn">View on Amazon</a>
+                        </div>
+                    `;
+                }
+            });
+
+            document.getElementById('amazon-deals-target').innerHTML = htmlContent || "<p style='text-align:center;'>No active deals found. Check back soon!</p>";
+
         } catch (error) {
-            document.getElementById('amazon-deals-target').innerHTML = "<p>Deals are being refreshed. Check back in a few minutes!</p>";
+            console.error("Error loading CSV:", error);
+            document.getElementById('amazon-deals-target').innerHTML = "<p style='text-align:center;'>Deals are being refreshed. Check back in a few minutes!</p>";
         }
     }
 
