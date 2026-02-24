@@ -6,48 +6,97 @@
     <title>Community Deals Hub</title>
     <style>
         * { box-sizing: border-box; }
+        
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
             margin: 0;
             background: #121212;
-            color: #eee;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             transition: background 3s ease-in-out;
             min-height: 100vh;
         }
+
         #wp-custom-wrapper {
             width: 90%;
             max-width: 1200px;
-            margin: 30px 0;
+            margin: 20px auto;
             background: transparent;
+            color: #eee;
         }
+
         #site-header {
-            text-align: center; padding: 40px; border-radius: 20px; margin-bottom: 30px;
-            background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px);
+            text-align: center; 
+            padding: 30px; 
+            border-radius: 20px; 
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.05); 
+            backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        .deals-grid { display: flex; flex-direction: column; gap: 20px; }
+
+        .deals-grid { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 20px; 
+        }
         
         .deal-box {
-            display: flex; flex-direction: row; align-items: center;
-            background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 15px;
-            padding: 25px; transition: 0.3s ease;
+            display: flex; 
+            flex-direction: row; 
+            align-items: center;
+            background: rgba(255, 255, 255, 0.08); 
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.12); 
+            border-radius: 15px;
+            padding: 20px; 
+            transition: 0.3s ease;
+            overflow: hidden;
         }
-        .deal-box:hover { transform: translateY(-3px); border-color: #ff9900; }
-        .deal-info { flex: 1; padding-right: 25px; }
-        .deal-title { font-size: 1.4rem; margin: 0 0 10px 0; color: #fff; }
-        .deal-desc { font-size: 0.95rem; color: #ccc; margin-bottom: 15px; }
+
+        .deal-box:hover { 
+            transform: translateY(-3px); 
+            border-color: #ff9900; 
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .deal-image-container {
+            width: 120px;
+            height: 120px;
+            margin-right: 20px;
+            flex-shrink: 0;
+            border-radius: 10px;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .deal-image-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .deal-info { flex: 1; padding-right: 20px; }
+        .deal-title { font-size: 1.2rem; margin: 0 0 8px 0; color: #fff; }
+        .deal-desc { font-size: 0.9rem; color: #ccc; margin: 0; }
         
         .buy-btn {
-            background: #ff9900; color: #111; text-decoration: none;
-            padding: 15px 35px; font-weight: bold; border-radius: 10px; white-space: nowrap;
+            background: #ff9900; 
+            color: #111; 
+            text-decoration: none;
+            padding: 12px 25px; 
+            font-weight: bold; 
+            border-radius: 8px; 
+            white-space: nowrap;
+            transition: background 0.2s;
         }
+
+        .buy-btn:hover { background: #e68a00; }
         
         @media (max-width: 768px) { 
             .deal-box { flex-direction: column; text-align: center; } 
+            .deal-image-container { margin: 0 0 15px 0; width: 100%; height: 180px; }
             .deal-info { padding: 0 0 20px 0; } 
         }
     </style>
@@ -61,15 +110,14 @@
     </div>
 
     <div class="deals-grid" id="amazon-deals-target">
-        <p style="text-align:center;">Loading daily deals...</p>
+        <p style="text-align:center;">Synchronizing with inventory...</p>
     </div>
 </div>
 
 <script>
-    const AFFILIATE_ID = "Werewolf3788-20";
+    const DEFAULT_ID = "Werewolf3788-20";
     const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTFygWPIyqmgu02ImqUERdgBLcQ5jPSEgxQuqumbiKOVe4YX7bzawxLBGEi7okVKlak9JTWDvb9bUcf/pub?gid=0&single=true&output=csv";
 
-    // 1. Wallpaper Logic (Weather-based)
     async function updateWallpaper() {
         try {
             const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=29.6516&longitude=-82.3248&current_weather=true');
@@ -84,47 +132,50 @@
         } catch (e) { console.log("Weather error"); }
     }
 
-    // 2. Fetch and Parse Google Sheet CSV
     async function loadDeals() {
         try {
             const response = await fetch(SHEET_URL);
             const csvData = await response.text();
+            const rows = csvData.split('\n').filter(row => row.trim() !== "");
+            const dataRows = rows.slice(1);
             
-            // Split CSV into rows and skip the header
-            const rows = csvData.split('\n').slice(1);
             let htmlContent = "";
 
-            rows.forEach(row => {
-                // Basic CSV split (handles simple columns: Title, Description, URL)
-                const columns = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+            dataRows.forEach(row => {
+                const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                 
-                if (columns.length >= 3) {
-                    let title = columns[0].replace(/"/g, "");
-                    let desc = columns[1].replace(/"/g, "");
-                    let rawUrl = columns[2].trim().replace(/"/g, "");
+                if (cols.length >= 3) {
+                    let title = cols[0]?.replace(/"/g, "").trim();
+                    let desc = cols[1]?.replace(/"/g, "").trim();
+                    let rawUrl = cols[2]?.replace(/"/g, "").trim();
+                    let imgUrl = cols[3]?.replace(/"/g, "").trim() || "https://placehold.co/150x150/222/white?text=No+Image";
+                    let affiliateId = cols[4]?.replace(/"/g, "").trim() || DEFAULT_ID;
 
-                    // Auto-apply Affiliate ID
-                    let affiliateUrl = rawUrl.includes('?') 
-                        ? `${rawUrl}&tag=${AFFILIATE_ID}` 
-                        : `${rawUrl}?tag=${AFFILIATE_ID}`;
+                    if(title && rawUrl) {
+                        let affiliateUrl = rawUrl.includes('?') 
+                            ? `${rawUrl}&tag=${affiliateId}` 
+                            : `${rawUrl}?tag=${affiliateId}`;
 
-                    htmlContent += `
-                        <div class="deal-box">
-                            <div class="deal-info">
-                                <h2 class="deal-title">${title}</h2>
-                                <p class="deal-desc">${desc}</p>
+                        htmlContent += `
+                            <div class="deal-box">
+                                <div class="deal-image-container">
+                                    <img src="${imgUrl}" alt="${title}" loading="lazy">
+                                </div>
+                                <div class="deal-info">
+                                    <h2 class="deal-title">${title}</h2>
+                                    <p class="deal-desc">${desc}</p>
+                                </div>
+                                <a href="${affiliateUrl}" target="_blank" class="buy-btn">View Deal</a>
                             </div>
-                            <a href="${affiliateUrl}" target="_blank" class="buy-btn">View on Amazon</a>
-                        </div>
-                    `;
+                        `;
+                    }
                 }
             });
 
-            document.getElementById('amazon-deals-target').innerHTML = htmlContent || "<p style='text-align:center;'>No active deals found. Check back soon!</p>";
+            document.getElementById('amazon-deals-target').innerHTML = htmlContent || "<p style='text-align:center;'>Check back soon for new clearance finds!</p>";
 
         } catch (error) {
-            console.error("Error loading CSV:", error);
-            document.getElementById('amazon-deals-target').innerHTML = "<p style='text-align:center;'>Deals are being refreshed. Check back in a few minutes!</p>";
+            document.getElementById('amazon-deals-target').innerHTML = "<p style='text-align:center;'>Unable to load deals right now.</p>";
         }
     }
 
