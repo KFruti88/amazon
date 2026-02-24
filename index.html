@@ -33,11 +33,32 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .deals-grid { 
-            display: flex; 
-            flex-direction: column; 
-            gap: 20px; 
+        /* Filter and Shuffle Controls */
+        .controls-row {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
         }
+
+        #category-select, .shuffle-btn {
+            padding: 12px 20px;
+            font-size: 1rem;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        #category-select { width: 100%; max-width: 250px; }
+        
+        .shuffle-btn:hover { background: rgba(255, 255, 255, 0.2); }
+
+        .deals-grid { display: flex; flex-direction: column; gap: 20px; }
         
         .deal-box {
             display: flex; 
@@ -49,18 +70,20 @@
             border-radius: 15px;
             padding: 20px; 
             transition: 0.3s ease;
-            overflow: hidden;
+            animation: fadeIn 0.4s ease forwards;
         }
 
-        .deal-box:hover { 
-            transform: translateY(-3px); 
-            border-color: #ff9900; 
-            background: rgba(255, 255, 255, 0.12);
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
         }
+
+        .deal-box.hidden { display: none; }
+        .deal-box:hover { transform: translateY(-3px); border-color: #ff9900; }
 
         .deal-image-container {
-            width: 120px;
-            height: 120px;
+            width: 140px;
+            height: 140px;
             margin-right: 20px;
             flex-shrink: 0;
             border-radius: 10px;
@@ -68,32 +91,35 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
+            padding: 10px;
         }
 
-        .deal-image-container img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
+        .deal-image-container img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
         .deal-info { flex: 1; padding-right: 20px; }
-        .deal-title { font-size: 1.2rem; margin: 0 0 8px 0; color: #fff; }
-        .deal-desc { font-size: 0.9rem; color: #ccc; margin: 0; }
+        .deal-title { font-size: 1.25rem; margin: 0 0 8px 0; color: #fff; }
+        .deal-desc { font-size: 0.95rem; color: #ccc; margin: 0 0 10px 0; }
         
+        .tag-badge {
+            display: inline-block;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2px 8px;
+            border-radius: 5px;
+            color: #aaa;
+        }
+
         .buy-btn {
             background: #ff9900; 
             color: #111; 
             text-decoration: none;
-            padding: 12px 25px; 
+            padding: 14px 30px; 
             font-weight: bold; 
             border-radius: 8px; 
             white-space: nowrap;
-            transition: background 0.2s;
         }
 
-        .buy-btn:hover { background: #e68a00; }
-        
         @media (max-width: 768px) { 
             .deal-box { flex-direction: column; text-align: center; } 
             .deal-image-container { margin: 0 0 15px 0; width: 100%; height: 180px; }
@@ -106,16 +132,23 @@
 <div id="wp-custom-wrapper">
     <div id="site-header">
         <h1>Amazon Clearance Picks</h1>
-        <p>Gainesville 32609 Real-Time Updates</p>
+        <p>Real-Time Community Deals</p>
+    </div>
+
+    <div class="controls-row">
+        <select id="category-select">
+            <option value="all">View All Categories</option>
+        </select>
+        <button class="shuffle-btn" onclick="loadDeals()">🎲 Reshuffle</button>
     </div>
 
     <div class="deals-grid" id="amazon-deals-target">
-        <p style="text-align:center;">Synchronizing with inventory...</p>
+        <p style="text-align:center;">Organizing deals...</p>
     </div>
 </div>
 
 <script>
-    const DEFAULT_ID = "Werewolf3788-20";
+    const DEFAULT_ID = "werewolf3788-20";
     const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTFygWPIyqmgu02ImqUERdgBLcQ5jPSEgxQuqumbiKOVe4YX7bzawxLBGEi7okVKlak9JTWDvb9bUcf/pub?gid=0&single=true&output=csv";
 
     async function updateWallpaper() {
@@ -129,7 +162,15 @@
             if (code >= 51) topColor = "#1a2a3a";
             if (temp > 29) topColor = "#3e1f1f";
             document.body.style.background = `linear-gradient(180deg, ${topColor} 0%, #000 100%)`;
-        } catch (e) { console.log("Weather error"); }
+        } catch (e) { console.log("Weather sync active."); }
+    }
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
     }
 
     async function loadDeals() {
@@ -139,31 +180,36 @@
             const rows = csvData.split('\n').filter(row => row.trim() !== "");
             const dataRows = rows.slice(1);
             
+            const shuffledRows = shuffleArray([...dataRows]);
+            
             let htmlContent = "";
+            let categories = new Set();
+            const select = document.getElementById('category-select');
+            const currentSelection = select.value;
 
-            dataRows.forEach(row => {
+            shuffledRows.forEach(row => {
                 const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                 
                 if (cols.length >= 3) {
                     let title = cols[0]?.replace(/"/g, "").trim();
                     let desc = cols[1]?.replace(/"/g, "").trim();
                     let rawUrl = cols[2]?.replace(/"/g, "").trim();
-                    let imgUrl = cols[3]?.replace(/"/g, "").trim() || "https://placehold.co/150x150/222/white?text=No+Image";
+                    let imgUrl = cols[3]?.replace(/"/g, "").trim() || "https://placehold.co/150x150/333/white?text=No+Image";
                     let affiliateId = cols[4]?.replace(/"/g, "").trim() || DEFAULT_ID;
 
                     if(title && rawUrl) {
-                        let affiliateUrl = rawUrl.includes('?') 
-                            ? `${rawUrl}&tag=${affiliateId}` 
-                            : `${rawUrl}?tag=${affiliateId}`;
+                        categories.add(affiliateId);
+                        let affiliateUrl = rawUrl.includes('?') ? `${rawUrl}&tag=${affiliateId}` : `${rawUrl}?tag=${affiliateId}`;
 
                         htmlContent += `
-                            <div class="deal-box">
+                            <div class="deal-box" data-category="${affiliateId}">
                                 <div class="deal-image-container">
                                     <img src="${imgUrl}" alt="${title}" loading="lazy">
                                 </div>
                                 <div class="deal-info">
                                     <h2 class="deal-title">${title}</h2>
                                     <p class="deal-desc">${desc}</p>
+                                    <span class="tag-badge">${affiliateId}</span>
                                 </div>
                                 <a href="${affiliateUrl}" target="_blank" class="buy-btn">View Deal</a>
                             </div>
@@ -172,12 +218,35 @@
                 }
             });
 
-            document.getElementById('amazon-deals-target').innerHTML = htmlContent || "<p style='text-align:center;'>Check back soon for new clearance finds!</p>";
+            // Rebuild dropdown if empty (first load)
+            if (select.options.length === 1) {
+                Array.from(categories).sort().forEach(cat => {
+                    const opt = document.createElement('option');
+                    opt.value = cat;
+                    opt.innerHTML = cat.replace("-20", "").toUpperCase();
+                    select.appendChild(opt);
+                });
+            }
+
+            document.getElementById('amazon-deals-target').innerHTML = htmlContent;
+
+            // Maintain current filter after shuffle
+            document.querySelectorAll('.deal-box').forEach(box => {
+                box.classList.toggle('hidden', currentSelection !== 'all' && box.getAttribute('data-category') !== currentSelection);
+            });
 
         } catch (error) {
-            document.getElementById('amazon-deals-target').innerHTML = "<p style='text-align:center;'>Unable to load deals right now.</p>";
+            document.getElementById('amazon-deals-target').innerHTML = "<p style='text-align:center;'>Unable to load inventory.</p>";
         }
     }
+
+    // Dropdown change event
+    document.getElementById('category-select').addEventListener('change', (e) => {
+        const selected = e.target.value;
+        document.querySelectorAll('.deal-box').forEach(box => {
+            box.classList.toggle('hidden', selected !== 'all' && box.getAttribute('data-category') !== selected);
+        });
+    });
 
     window.onload = () => {
         updateWallpaper();
