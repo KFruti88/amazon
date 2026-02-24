@@ -93,8 +93,14 @@
         body.wot-mode .deal-box.match-highlight { border: 2px solid #8b9467; box-shadow: 0 0 20px rgba(139, 148, 103, 0.5); }
         body.swat-mode .deal-box.match-highlight { animation: swatStrobe 0.5s infinite alternate; border-width: 2px; }
         @keyframes swatStrobe { 0% { border-color: #1a237e; box-shadow: 0 0 15px rgba(26, 35, 126, 0.7); } 100% { border-color: #d32f2f; box-shadow: 0 0 10px rgba(211, 47, 47, 0.5); } }
+        
+        /* Racing Highlight: Police Flash tied to Need for Speed/Wheels items */
         body.racing-mode .deal-box.match-highlight { animation: policeFlash 0.8s infinite alternate; border-width: 2px; }
-        @keyframes policeFlash { 0% { border-color: #ff0000; box-shadow: 0 0 15px rgba(255, 0, 0, 0.6); } 100% { border-color: #0000ff; box-shadow: 0 0 15px rgba(0, 255, 0, 0.6); } }
+        @keyframes policeFlash {
+            0% { border-color: #ff0000; box-shadow: 0 0 15px rgba(255, 0, 0, 0.6); }
+            100% { border-color: #0000ff; box-shadow: 0 0 15px rgba(0, 0, 255, 0.6); }
+        }
+
         body.farming-mode .deal-box.match-highlight { border: 2px solid #ffde00; box-shadow: 0 0 20px #ffde0066; }
         body.hunting-mode .deal-box.match-highlight { border: 2px solid #355e3b; box-shadow: 0 0 20px #355e3b66; }
         body.fishing-mode .deal-box.match-highlight { border: 2px solid #0077be; box-shadow: 0 0 20px #0077be66; }
@@ -197,7 +203,7 @@
             } else if (gameLower.includes("ready or not")) {
                 body.classList.add("swat-mode");
                 status.innerHTML = `🛡️ SWAT MODE: ${game.toUpperCase()}`;
-            } else if (gameLower.includes("need for speed") || gameLower.includes("racing") || gameLower.includes("driving")) {
+            } else if (gameLower.includes("need for speed") || gameLower.includes("racing") || gameLower.includes("driving") || gameLower.includes("hot wheels")) {
                 body.classList.add("racing-mode");
                 status.innerHTML = `🏎️ RACING MODE: ${game.toUpperCase()}`;
             } else if (gameLower.includes("farming") || gameLower.includes("simulator")) {
@@ -236,11 +242,12 @@
             const select = document.getElementById('category-select');
             const currentFilter = select.value;
 
+            // Updated keywords to include Wheels/Hot Wheels in racing
             const keywords = {
                 cod: ["headset", "controller", "fps", "gaming mouse", "monitor", "mic"],
                 wot: ["tank", "armor", "steel", "radio", "camouflage", "model"],
                 swat: ["tactical", "swat", "vest", "helmet", "boots", "flashlight"],
-                race: ["racing", "car", "speed", "tire", "engine"],
+                race: ["racing", "car", "speed", "tire", "engine", "hot wheels", "wheels", "steering"],
                 farm: ["farm", "tractor", "supply", "almanac", "harvest"],
                 hunt: ["hunting", "ammo", "gun", "camouflage"],
                 fish: ["fishing", "angler", "boat"]
@@ -263,7 +270,7 @@
                     let isMatch = false;
                     const body = document.getElementById('main-body');
                     
-                    if (activeGameLower && content.includes(activeGameLower)) {
+                    if (activeGameLower && (content.includes(activeGameLower) || (activeGameLower.includes("hot wheels") && content.includes("wheels")))) {
                         isMatch = true;
                     } else {
                         if (body.classList.contains('cod-mode')) isMatch = keywords.cod.some(k => content.includes(k));
@@ -276,8 +283,6 @@
                     }
 
                     let finalUrl = url.includes('?') ? `${url}&tag=${tag}` : `${url}?tag=${tag}`;
-                    
-                    // Render html but control visibility based on filter
                     let isHidden = (currentFilter !== 'all' && tag !== currentFilter) ? 'hidden' : '';
 
                     htmlContent += `<div class="deal-box ${isMatch ? 'match-highlight' : ''} ${isHidden}" data-tag="${tag}">
@@ -288,7 +293,6 @@
                 }
             });
 
-            // Update dropdown if it only has the default option
             if (select.options.length === 1) {
                 Array.from(categories).sort().forEach(cat => {
                     const opt = document.createElement('option');
@@ -302,7 +306,6 @@
         } catch (e) { console.log("Inventory error."); }
     }
 
-    // Dropdown change logic
     document.getElementById('category-select').addEventListener('change', (e) => {
         const val = e.target.value;
         document.querySelectorAll('.deal-box').forEach(box => {
