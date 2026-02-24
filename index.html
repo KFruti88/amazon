@@ -9,267 +9,206 @@
         
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
             background: #121212;
-            transition: background 3s ease-in-out;
+            transition: background 1.5s ease-in-out;
             min-height: 100vh;
-            display: flex;
-            justify-content: center; /* Centers the wrapper horizontally */
+            display: flex; justify-content: center;
+            overflow-x: hidden;
+            position: relative;
         }
 
-        /* Mandatory Wrapper: 90% width, Responsive, and Centered */
+        /* Mandatory Centered Wrapper at 90% Width */
         #wp-custom-wrapper {
             width: 90%; 
-            max-width: 1000px; /* Slightly tighter max-width for better centering */
+            max-width: 1000px;
             margin: 20px auto;
             background: transparent;
             color: #eee;
-            display: flex;
-            flex-direction: column;
-            align-items: center; /* Centers all content inside the wrapper */
+            display: flex; flex-direction: column; align-items: center;
+            z-index: 10;
         }
 
         #site-header {
-            width: 100%;
-            text-align: center; 
-            padding: 30px 15px; 
-            border-radius: 20px; 
-            margin-bottom: 30px;
+            width: 100%; text-align: center; padding: 30px; 
+            border-radius: 20px; margin-bottom: 30px;
             background: rgba(255, 255, 255, 0.05); 
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .controls-row {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-            width: 100%;
-        }
-
-        #category-select, .shuffle-btn {
-            padding: 12px 20px;
-            font-size: 1rem;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            cursor: pointer;
-            outline: none;
-        }
-
-        #category-select { width: 100%; max-width: 280px; }
-        .shuffle-btn:hover { background: rgba(255, 255, 255, 0.2); }
-
-        .deals-grid { 
-            display: flex; 
-            flex-direction: column; 
-            gap: 20px; 
-            width: 100%; /* Keeps boxes from hanging off edge */
-        }
+        .deals-grid { display: flex; flex-direction: column; gap: 20px; width: 100%; }
         
         .deal-box {
-            display: flex; 
-            flex-direction: row; 
-            align-items: center;
-            background: rgba(255, 255, 255, 0.08); 
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.12); 
-            border-radius: 15px;
-            padding: 20px; 
-            transition: 0.3s ease;
-            width: 100%;
+            display: flex; flex-direction: row; align-items: center;
+            background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 15px;
+            padding: 20px; transition: 0.4s ease; width: 100%;
         }
 
-        .deal-box.hidden { display: none; }
-        .deal-box:hover { transform: translateY(-3px); border-color: #ff9900; }
+        /* --- MODE-SPECIFIC BOX HIGHLIGHTS --- */
 
-        /* 1:1 Ratio for Images */
+        /* Racing Mode: Police Flash Effect */
+        body.racing-mode .deal-box.match-highlight { 
+            animation: policeFlash 0.8s infinite alternate;
+            border-width: 2px;
+        }
+
+        @keyframes policeFlash {
+            0% { border-color: #ff0000; box-shadow: 0 0 15px rgba(255, 0, 0, 0.6); }
+            100% { border-color: #0000ff; box-shadow: 0 0 15px rgba(0, 0, 255, 0.6); }
+        }
+
+        /* Standard Mode Highlights */
+        body.farming-mode .deal-box.match-highlight { border: 2px solid #ffde00; box-shadow: 0 0 20px rgba(255, 222, 0, 0.4); }
+        body.hunting-mode .deal-box.match-highlight { border: 2px solid #355e3b; box-shadow: 0 0 20px rgba(53, 94, 59, 0.4); }
+        body.fishing-mode .deal-box.match-highlight { border: 2px solid #0077be; box-shadow: 0 0 20px rgba(0, 119, 190, 0.4); }
+
+        /* --- DYNAMIC THEMES --- */
+
+        body.racing-mode {
+            background: linear-gradient(180deg, #1a1a1a 0%, #000 100%);
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><text x="0" y="24" font-size="24">🏎️</text></svg>'), auto;
+        }
+
+        body.farming-mode {
+            background: linear-gradient(180deg, #367c2b 0%, #1a3a16 100%);
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><text x="0" y="24" font-size="24">🚜</text></svg>'), auto;
+        }
+
+        body.hunting-mode {
+            background: linear-gradient(180deg, #1b3022 0%, #000 100%);
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><circle cx="16" cy="16" r="12" stroke="%23355e3b" stroke-width="1" fill="none"><animate attributeName="r" values="8;12;8" dur="2s" repeatCount="indefinite" /></circle><line x1="16" y1="0" x2="16" y2="32" stroke="%23355e3b"/><line x1="0" y1="16" x2="32" y2="16" stroke="%23355e3b"/></svg>'), auto;
+        }
+
+        body.fishing-mode {
+            background: linear-gradient(180deg, #001f3f 0%, #000 100%);
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><circle cx="16" cy="16" r="10" stroke="%230077be" stroke-width="2" fill="none" opacity="0.6"><animate attributeName="r" from="10" to="15" dur="1s" repeatCount="indefinite" /></circle></svg>'), auto;
+        }
+
+        .farm-pop { position: fixed; font-size: 3rem; opacity: 0; transition: opacity 1s; pointer-events: none; z-index: 1; }
+
         .deal-image-container {
-            width: 140px;
-            aspect-ratio: 1 / 1; /* Forces 1:1 Ratio */
-            margin-right: 20px;
-            flex-shrink: 0;
-            border-radius: 10px;
-            background: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 10px;
-            overflow: hidden;
+            width: 140px; aspect-ratio: 1 / 1; margin-right: 20px;
+            flex-shrink: 0; border-radius: 10px; background: #fff;
+            display: flex; align-items: center; justify-content: center; padding: 10px;
         }
-
-        .deal-image-container img { 
-            width: 100%; 
-            height: 100%; 
-            object-fit: contain; /* Prevents stretching */
-        }
-
+        .deal-image-container img { width: 100%; height: 100%; object-fit: contain; }
         .deal-info { flex: 1; padding-right: 20px; }
-        .deal-title { font-size: 1.25rem; margin: 0 0 8px 0; color: #fff; }
-        .deal-desc { font-size: 0.95rem; color: #ccc; margin: 0 0 10px 0; line-height: 1.4; }
-        
-        .tag-badge {
-            display: inline-block;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 2px 8px;
-            border-radius: 5px;
-            color: #aaa;
-        }
+        .buy-btn { background: #ff9900; color: #111; text-decoration: none; padding: 12px 25px; font-weight: bold; border-radius: 8px; white-space: nowrap; }
 
-        .buy-btn {
-            background: #ff9900; 
-            color: #111; 
-            text-decoration: none;
-            padding: 14px 30px; 
-            font-weight: bold; 
-            border-radius: 8px; 
-            white-space: nowrap;
-        }
-
-        /* Mobile Optimization: Strictly Centered */
         @media (max-width: 768px) { 
-            #wp-custom-wrapper { width: 95%; }
-            .deal-box { 
-                flex-direction: column; 
-                text-align: center; 
-                padding: 20px; 
-            } 
-            .deal-image-container { 
-                margin: 0 0 20px 0; 
-                width: 180px; /* Slightly larger on mobile */
-                height: 180px; 
-            }
-            .deal-info { padding: 0 0 20px 0; width: 100%; } 
-            .buy-btn { width: 100%; display: block; }
+            .deal-box { flex-direction: column; text-align: center; } 
+            .deal-image-container { margin: 0 0 20px 0; width: 180px; height: 180px; }
+            .buy-btn { width: 100%; margin-top: 10px; }
         }
     </style>
 </head>
-<body>
+<body id="main-body">
 
 <div id="wp-custom-wrapper">
     <div id="site-header">
         <h1>Amazon Clearance Picks</h1>
-        <p>Real-Time Community Deals</p>
+        <p id="live-status">Syncing Twitch Status...</p>
     </div>
-
-    <div class="controls-row">
-        <select id="category-select">
-            <option value="all">View All Categories</option>
-        </select>
-        <button class="shuffle-btn" onclick="loadDeals()">🎲 Reshuffle</button>
-    </div>
-
     <div class="deals-grid" id="amazon-deals-target">
-        <p style="text-align:center;">Organizing inventory...</p>
+        <p style="text-align:center;">Scanning inventory...</p>
     </div>
 </div>
 
 <script>
-    const DEFAULT_ID = "werewolf3788-20";
+    const TWITCH_USER = "werewolf3788"; //
     const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTFygWPIyqmgu02ImqUERdgBLcQ5jPSEgxQuqumbiKOVe4YX7bzawxLBGEi7okVKlak9JTWDvb9bUcf/pub?gid=0&single=true&output=csv";
 
-    async function updateWallpaper() {
-        try {
-            const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=29.6516&longitude=-82.3248&current_weather=true');
-            const data = await res.json();
-            const temp = data.current_weather.temperature;
-            const code = data.current_weather.weathercode;
-            let topColor = "#121212"; 
-            if (code >= 1 && code <= 3) topColor = "#1e3a5f";
-            if (code >= 51) topColor = "#1a2a3a";
-            if (temp > 29) topColor = "#3e1f1f";
-            document.body.style.background = `linear-gradient(180deg, ${topColor} 0%, #000 100%)`;
-        } catch (e) { console.log("Weather update failed."); }
+    function spawnEquipment() {
+        if (!document.body.classList.contains('farming-mode')) return;
+        const equipment = ['🚜', '🌾', '🌱', '🧺', '🌽', '🌻'];
+        const el = document.createElement('div');
+        el.className = 'farm-pop';
+        el.innerText = equipment[Math.floor(Math.random() * equipment.length)];
+        el.style.left = Math.random() * 90 + 'vw';
+        el.style.top = Math.random() * 90 + 'vh';
+        document.body.appendChild(el);
+        setTimeout(() => el.style.opacity = '0.4', 100);
+        setTimeout(() => el.style.opacity = '0', 3000);
+        setTimeout(() => el.remove(), 4500);
     }
 
-    function shuffleArray(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array;
+    async function checkTwitchMode() {
+        try {
+            const res = await fetch(`https://decapi.me/twitch/game/${TWITCH_USER}`); //
+            const game = (await res.text()).toLowerCase();
+            const body = document.getElementById('main-body');
+            const status = document.getElementById('live-status');
+            body.className = '';
+
+            if (game.includes("need for speed") || game.includes("racing") || game.includes("driving")) {
+                body.classList.add("racing-mode");
+                status.innerHTML = `🏎️ Live/Offline: ${game.toUpperCase()} - Police Chase Active`;
+            } else if (game.includes("farming") || game.includes("simulator")) {
+                body.classList.add("farming-mode");
+                status.innerHTML = `🚜 Last Played/Live: ${game.toUpperCase()}`;
+                setInterval(spawnEquipment, 5000);
+            } else if (game.includes("angler")) {
+                body.classList.add("fishing-mode");
+                status.innerHTML = "🎣 Theme Active: The Angler";
+            } else if (game.includes("hunter") || game.includes("hunting") || game.includes("predator")) {
+                body.classList.add("hunting-mode");
+                status.innerHTML = "🎯 Theme Active: Hunting Mode";
+            } else {
+                status.innerHTML = "Real-Time Community Deals";
+            }
+        } catch (e) { status.innerHTML = "Amazon Affiliate Hub"; }
     }
 
     async function loadDeals() {
         try {
             const response = await fetch(SHEET_URL);
             const csvData = await response.text();
-            const rows = csvData.split('\n').filter(row => row.trim() !== "");
-            const dataRows = rows.slice(1);
-            
-            const shuffledRows = shuffleArray([...dataRows]);
-            
+            const rows = csvData.split('\n').filter(r => r.trim() !== "").slice(1);
             let htmlContent = "";
-            let categories = new Set();
-            const select = document.getElementById('category-select');
-            const currentSelection = select.value;
+            const keywords = {
+                race: ["racing", "car", "speed", "police", "tire", "wheel", "engine"],
+                farm: ["farm", "tractor", "supply", "almanac", "harvest"],
+                hunt: ["hunting", "ammo", "gun", "camouflage", "scope"],
+                fish: ["fishing", "angler", "water", "boat"]
+            };
 
-            shuffledRows.forEach(row => {
+            rows.forEach(row => {
                 const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-                
                 if (cols.length >= 3) {
-                    let title = cols[0]?.replace(/"/g, "").trim();
-                    let desc = cols[1]?.replace(/"/g, "").trim();
-                    let rawUrl = cols[2]?.replace(/"/g, "").trim();
-                    let imgUrl = cols[3]?.replace(/"/g, "").trim() || "https://placehold.co/150x150/333/white?text=No+Image";
-                    let affiliateId = cols[4]?.replace(/"/g, "").trim() || DEFAULT_ID;
+                    let title = cols[0].replace(/"/g, "").trim();
+                    let desc = cols[1].replace(/"/g, "").trim();
+                    let url = cols[2].replace(/"/g, "").trim();
+                    let img = cols[3]?.replace(/"/g, "").trim() || "https://placehold.co/150";
+                    let tag = cols[4]?.replace(/"/g, "").trim() || "werewolf3788-20"; //
 
-                    if(title && rawUrl) {
-                        categories.add(affiliateId);
-                        let affiliateUrl = rawUrl.includes('?') ? `${rawUrl}&tag=${affiliateId}` : `${rawUrl}?tag=${affiliateId}`;
+                    let content = (title + " " + desc).toLowerCase();
+                    let isMatch = false;
+                    const body = document.getElementById('main-body');
+                    
+                    if (body.classList.contains('racing-mode')) isMatch = keywords.race.some(k => content.includes(k));
+                    if (body.classList.contains('farming-mode')) isMatch = keywords.farm.some(k => content.includes(k));
+                    if (body.classList.contains('hunting-mode')) isMatch = keywords.hunt.some(k => content.includes(k));
+                    if (body.classList.contains('fishing-mode')) isMatch = keywords.fish.some(k => content.includes(k));
 
-                        htmlContent += `
-                            <div class="deal-box" data-category="${affiliateId}">
-                                <div class="deal-image-container">
-                                    <img src="${imgUrl}" alt="${title}" loading="lazy">
-                                </div>
-                                <div class="deal-info">
-                                    <h2 class="deal-title">${title}</h2>
-                                    <p class="deal-desc">${desc}</p>
-                                    <span class="tag-badge">${affiliateId.replace('-20', '')}</span>
-                                </div>
-                                <a href="${affiliateUrl}" target="_blank" class="buy-btn">View Deal</a>
+                    let finalUrl = url.includes('?') ? `${url}&tag=${tag}` : `${url}?tag=${tag}`;
+                    htmlContent += `
+                        <div class="deal-box ${isMatch ? 'match-highlight' : ''}">
+                            <div class="deal-image-container"><img src="${img}" alt="${title}"></div>
+                            <div class="deal-info">
+                                <h2 class="deal-title">${title}</h2>
+                                <p class="deal-desc">${desc}</p>
                             </div>
-                        `;
-                    }
+                            <a href="${finalUrl}" target="_blank" class="buy-btn">View Deal</a>
+                        </div>`;
                 }
             });
-
-            if (select.options.length === 1) {
-                Array.from(categories).sort().forEach(cat => {
-                    const opt = document.createElement('option');
-                    opt.value = cat;
-                    opt.innerHTML = cat.replace("-20", "").toUpperCase();
-                    select.appendChild(opt);
-                });
-            }
-
             document.getElementById('amazon-deals-target').innerHTML = htmlContent;
-
-            document.querySelectorAll('.deal-box').forEach(box => {
-                box.classList.toggle('hidden', currentSelection !== 'all' && box.getAttribute('data-category') !== currentSelection);
-            });
-
-        } catch (error) {
-            document.getElementById('amazon-deals-target').innerHTML = "<p style='text-align:center;'>Unable to load. Check Sheet link.</p>";
-        }
+        } catch (e) { console.log("Inventory error."); }
     }
 
-    document.getElementById('category-select').addEventListener('change', (e) => {
-        const selected = e.target.value;
-        document.querySelectorAll('.deal-box').forEach(box => {
-            box.classList.toggle('hidden', selected !== 'all' && box.getAttribute('data-category') !== selected);
-        });
-    });
-
-    window.onload = () => {
-        updateWallpaper();
+    window.onload = async () => {
+        await checkTwitchMode();
         loadDeals();
     };
 </script>
