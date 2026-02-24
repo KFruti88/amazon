@@ -10,22 +10,30 @@
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
             margin: 0;
+            padding: 0;
             background: #121212;
             transition: background 3s ease-in-out;
             min-height: 100vh;
+            display: flex;
+            justify-content: center; /* Centers the wrapper horizontally */
         }
 
+        /* Mandatory Wrapper: 90% width, Responsive, and Centered */
         #wp-custom-wrapper {
-            width: 90%;
-            max-width: 1200px;
+            width: 90%; 
+            max-width: 1000px; /* Slightly tighter max-width for better centering */
             margin: 20px auto;
             background: transparent;
             color: #eee;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Centers all content inside the wrapper */
         }
 
         #site-header {
+            width: 100%;
             text-align: center; 
-            padding: 30px; 
+            padding: 30px 15px; 
             border-radius: 20px; 
             margin-bottom: 30px;
             background: rgba(255, 255, 255, 0.05); 
@@ -33,13 +41,13 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        /* Filter and Shuffle Controls */
         .controls-row {
             display: flex;
             gap: 10px;
             justify-content: center;
             margin-bottom: 30px;
             flex-wrap: wrap;
+            width: 100%;
         }
 
         #category-select, .shuffle-btn {
@@ -51,14 +59,17 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
             cursor: pointer;
             outline: none;
-            transition: 0.2s;
         }
 
-        #category-select { width: 100%; max-width: 250px; }
-        
+        #category-select { width: 100%; max-width: 280px; }
         .shuffle-btn:hover { background: rgba(255, 255, 255, 0.2); }
 
-        .deals-grid { display: flex; flex-direction: column; gap: 20px; }
+        .deals-grid { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 20px; 
+            width: 100%; /* Keeps boxes from hanging off edge */
+        }
         
         .deal-box {
             display: flex; 
@@ -70,20 +81,16 @@
             border-radius: 15px;
             padding: 20px; 
             transition: 0.3s ease;
-            animation: fadeIn 0.4s ease forwards;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
+            width: 100%;
         }
 
         .deal-box.hidden { display: none; }
         .deal-box:hover { transform: translateY(-3px); border-color: #ff9900; }
 
+        /* 1:1 Ratio for Images */
         .deal-image-container {
             width: 140px;
-            height: 140px;
+            aspect-ratio: 1 / 1; /* Forces 1:1 Ratio */
             margin-right: 20px;
             flex-shrink: 0;
             border-radius: 10px;
@@ -92,13 +99,18 @@
             align-items: center;
             justify-content: center;
             padding: 10px;
+            overflow: hidden;
         }
 
-        .deal-image-container img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        .deal-image-container img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: contain; /* Prevents stretching */
+        }
 
         .deal-info { flex: 1; padding-right: 20px; }
         .deal-title { font-size: 1.25rem; margin: 0 0 8px 0; color: #fff; }
-        .deal-desc { font-size: 0.95rem; color: #ccc; margin: 0 0 10px 0; }
+        .deal-desc { font-size: 0.95rem; color: #ccc; margin: 0 0 10px 0; line-height: 1.4; }
         
         .tag-badge {
             display: inline-block;
@@ -120,10 +132,21 @@
             white-space: nowrap;
         }
 
+        /* Mobile Optimization: Strictly Centered */
         @media (max-width: 768px) { 
-            .deal-box { flex-direction: column; text-align: center; } 
-            .deal-image-container { margin: 0 0 15px 0; width: 100%; height: 180px; }
-            .deal-info { padding: 0 0 20px 0; } 
+            #wp-custom-wrapper { width: 95%; }
+            .deal-box { 
+                flex-direction: column; 
+                text-align: center; 
+                padding: 20px; 
+            } 
+            .deal-image-container { 
+                margin: 0 0 20px 0; 
+                width: 180px; /* Slightly larger on mobile */
+                height: 180px; 
+            }
+            .deal-info { padding: 0 0 20px 0; width: 100%; } 
+            .buy-btn { width: 100%; display: block; }
         }
     </style>
 </head>
@@ -143,7 +166,7 @@
     </div>
 
     <div class="deals-grid" id="amazon-deals-target">
-        <p style="text-align:center;">Organizing deals...</p>
+        <p style="text-align:center;">Organizing inventory...</p>
     </div>
 </div>
 
@@ -162,7 +185,7 @@
             if (code >= 51) topColor = "#1a2a3a";
             if (temp > 29) topColor = "#3e1f1f";
             document.body.style.background = `linear-gradient(180deg, ${topColor} 0%, #000 100%)`;
-        } catch (e) { console.log("Weather sync active."); }
+        } catch (e) { console.log("Weather update failed."); }
     }
 
     function shuffleArray(array) {
@@ -209,7 +232,7 @@
                                 <div class="deal-info">
                                     <h2 class="deal-title">${title}</h2>
                                     <p class="deal-desc">${desc}</p>
-                                    <span class="tag-badge">${affiliateId}</span>
+                                    <span class="tag-badge">${affiliateId.replace('-20', '')}</span>
                                 </div>
                                 <a href="${affiliateUrl}" target="_blank" class="buy-btn">View Deal</a>
                             </div>
@@ -218,7 +241,6 @@
                 }
             });
 
-            // Rebuild dropdown if empty (first load)
             if (select.options.length === 1) {
                 Array.from(categories).sort().forEach(cat => {
                     const opt = document.createElement('option');
@@ -230,17 +252,15 @@
 
             document.getElementById('amazon-deals-target').innerHTML = htmlContent;
 
-            // Maintain current filter after shuffle
             document.querySelectorAll('.deal-box').forEach(box => {
                 box.classList.toggle('hidden', currentSelection !== 'all' && box.getAttribute('data-category') !== currentSelection);
             });
 
         } catch (error) {
-            document.getElementById('amazon-deals-target').innerHTML = "<p style='text-align:center;'>Unable to load inventory.</p>";
+            document.getElementById('amazon-deals-target').innerHTML = "<p style='text-align:center;'>Unable to load. Check Sheet link.</p>";
         }
     }
 
-    // Dropdown change event
     document.getElementById('category-select').addEventListener('change', (e) => {
         const selected = e.target.value;
         document.querySelectorAll('.deal-box').forEach(box => {
