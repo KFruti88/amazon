@@ -18,7 +18,7 @@
             position: relative;
         }
 
-        /* Mandatory Centered Wrapper at 90% Width */
+        /* Mandatory Centered Wrapper for Lead Developer Werewolf3788 */
         #wp-custom-wrapper {
             width: 90%; 
             max-width: 1000px;
@@ -45,62 +45,61 @@
             padding: 20px; transition: 0.4s ease; width: 100%;
         }
 
-        /* --- MODE-SPECIFIC BOX HIGHLIGHTS --- */
+        /* --- DYNAMIC MODE HIGHLIGHTS --- */
 
-        /* Racing Mode: Police Flash Effect */
-        body.racing-mode .deal-box.match-highlight { 
-            animation: policeFlash 0.8s infinite alternate;
-            border-width: 2px;
+        /* COD: Digital Glitch Border */
+        body.cod-mode .deal-box.match-highlight { 
+            border: 2px solid #9ef01a; 
+            background: rgba(158, 240, 26, 0.1);
+            animation: glitchBorder 1.5s infinite;
+        }
+        @keyframes glitchBorder {
+            0% { box-shadow: 0 0 10px #9ef01a; }
+            50% { box-shadow: 2px -2px 15px #38b000, -2px 2px 15px #9ef01a; }
+            100% { box-shadow: 0 0 10px #9ef01a; }
         }
 
+        /* WOT: Steel Armor Glow */
+        body.wot-mode .deal-box.match-highlight { border: 2px solid #8b9467; box-shadow: 0 0 20px rgba(139, 148, 103, 0.5); }
+
+        /* SWAT: Tactical Strobe */
+        body.swat-mode .deal-box.match-highlight { animation: swatStrobe 0.5s infinite alternate; }
+        @keyframes swatStrobe {
+            0% { border-color: #1a237e; box-shadow: 0 0 15px rgba(26, 35, 126, 0.7); }
+            100% { border-color: #d32f2f; box-shadow: 0 0 10px rgba(211, 47, 47, 0.5); }
+        }
+
+        /* Racing: Police Flash */
+        body.racing-mode .deal-box.match-highlight { animation: policeFlash 0.8s infinite alternate; }
         @keyframes policeFlash {
             0% { border-color: #ff0000; box-shadow: 0 0 15px rgba(255, 0, 0, 0.6); }
             100% { border-color: #0000ff; box-shadow: 0 0 15px rgba(0, 0, 255, 0.6); }
         }
 
-        /* Standard Mode Highlights */
-        body.farming-mode .deal-box.match-highlight { border: 2px solid #ffde00; box-shadow: 0 0 20px rgba(255, 222, 0, 0.4); }
-        body.hunting-mode .deal-box.match-highlight { border: 2px solid #355e3b; box-shadow: 0 0 20px rgba(53, 94, 59, 0.4); }
-        body.fishing-mode .deal-box.match-highlight { border: 2px solid #0077be; box-shadow: 0 0 20px rgba(0, 119, 190, 0.4); }
+        /* Standard Game Highlights */
+        body.farming-mode .deal-box.match-highlight { border: 2px solid #ffde00; box-shadow: 0 0 20px #ffde0066; }
+        body.hunting-mode .deal-box.match-highlight { border: 2px solid #355e3b; box-shadow: 0 0 20px #355e3b66; }
+        body.fishing-mode .deal-box.match-highlight { border: 2px solid #0077be; box-shadow: 0 0 20px #0077be66; }
 
-        /* --- DYNAMIC THEMES --- */
+        /* --- DYNAMIC THEMES & CURSORS --- */
 
-        body.racing-mode {
-            background: linear-gradient(180deg, #1a1a1a 0%, #000 100%);
-            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><text x="0" y="24" font-size="24">🏎️</text></svg>'), auto;
-        }
+        body.cod-mode { background: linear-gradient(180deg, #0a0f02 0%, #000 100%); cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><circle cx="16" cy="16" r="2" fill="%23ff0000"/><circle cx="16" cy="16" r="14" stroke="%239ef01a" stroke-width="1" fill="none"/></svg>'), auto; }
+        body.wot-mode { background: linear-gradient(180deg, #3d4432 0%, #000 100%); cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><circle cx="16" cy="16" r="14" stroke="%238b9467" stroke-width="2" fill="none"/><line x1="16" y1="2" x2="16" y2="30" stroke="%238b9467"/><line x1="2" y1="16" x2="30" y2="16" stroke="%238b9467"/></svg>'), auto; }
+        body.swat-mode { background: linear-gradient(180deg, #0d1117 0%, #000 100%); cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><circle cx="16" cy="16" r="2" fill="%23ff0000"/><circle cx="16" cy="16" r="14" stroke="%23333" stroke-width="1" fill="none"/></svg>'), auto; }
+        body.racing-mode { background: linear-gradient(180deg, #1a1a1a 0%, #000 100%); cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><text x="0" y="24" font-size="24">🏎️</text></svg>'), auto; }
+        body.farming-mode { background: linear-gradient(180deg, #367c2b 0%, #1a3a16 100%); cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><text x="0" y="24" font-size="24">🚜</text></svg>'), auto; }
+        body.farming-mode::before { content: ""; position: fixed; bottom: 0; left: 0; width: 100%; height: 180px; background: url('https://www.transparenttextures.com/patterns/grass.png'); opacity: 0.25; pointer-events: none; }
+        body.hunting-mode { background: linear-gradient(180deg, #1b3022 0%, #000 100%); cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><circle cx="16" cy="16" r="12" stroke="%23355e3b" stroke-width="1" fill="none"><animate attributeName="r" values="8;12;8" dur="2s" repeatCount="indefinite" /></circle><line x1="16" y1="2" x2="16" y2="30" stroke="%23355e3b"/><line x1="2" y1="16" x2="30" y2="16" stroke="%23355e3b"/></svg>'), auto; }
+        body.fishing-mode { background: linear-gradient(180deg, #001f3f 0%, #000 100%); cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><circle cx="16" cy="16" r="10" stroke="%230077be" stroke-width="2" fill="none" opacity="0.6"><animate attributeName="r" from="10" to="15" dur="1s" repeatCount="indefinite" /></circle></svg>'), auto; }
 
-        body.farming-mode {
-            background: linear-gradient(180deg, #367c2b 0%, #1a3a16 100%);
-            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><text x="0" y="24" font-size="24">🚜</text></svg>'), auto;
-        }
+        .game-pop { position: fixed; font-size: 3rem; opacity: 0; transition: opacity 1s; pointer-events: none; z-index: 1; }
 
-        body.hunting-mode {
-            background: linear-gradient(180deg, #1b3022 0%, #000 100%);
-            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><circle cx="16" cy="16" r="12" stroke="%23355e3b" stroke-width="1" fill="none"><animate attributeName="r" values="8;12;8" dur="2s" repeatCount="indefinite" /></circle><line x1="16" y1="0" x2="16" y2="32" stroke="%23355e3b"/><line x1="0" y1="16" x2="32" y2="16" stroke="%23355e3b"/></svg>'), auto;
-        }
-
-        body.fishing-mode {
-            background: linear-gradient(180deg, #001f3f 0%, #000 100%);
-            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><circle cx="16" cy="16" r="10" stroke="%230077be" stroke-width="2" fill="none" opacity="0.6"><animate attributeName="r" from="10" to="15" dur="1s" repeatCount="indefinite" /></circle></svg>'), auto;
-        }
-
-        .farm-pop { position: fixed; font-size: 3rem; opacity: 0; transition: opacity 1s; pointer-events: none; z-index: 1; }
-
-        .deal-image-container {
-            width: 140px; aspect-ratio: 1 / 1; margin-right: 20px;
-            flex-shrink: 0; border-radius: 10px; background: #fff;
-            display: flex; align-items: center; justify-content: center; padding: 10px;
-        }
+        .deal-image-container { width: 140px; aspect-ratio: 1/1; margin-right: 20px; flex-shrink: 0; border-radius: 10px; background: #fff; display: flex; align-items: center; justify-content: center; padding: 10px; overflow: hidden; }
         .deal-image-container img { width: 100%; height: 100%; object-fit: contain; }
         .deal-info { flex: 1; padding-right: 20px; }
         .buy-btn { background: #ff9900; color: #111; text-decoration: none; padding: 12px 25px; font-weight: bold; border-radius: 8px; white-space: nowrap; }
 
-        @media (max-width: 768px) { 
-            .deal-box { flex-direction: column; text-align: center; } 
-            .deal-image-container { margin: 0 0 20px 0; width: 180px; height: 180px; }
-            .buy-btn { width: 100%; margin-top: 10px; }
-        }
+        @media (max-width: 768px) { .deal-box { flex-direction: column; text-align: center; } .deal-image-container { margin: 0 0 20px 0; width: 180px; height: 180px; } .buy-btn { width: 100%; margin-top: 10px; } }
     </style>
 </head>
 <body id="main-body">
@@ -108,22 +107,27 @@
 <div id="wp-custom-wrapper">
     <div id="site-header">
         <h1>Amazon Clearance Picks</h1>
-        <p id="live-status">Syncing Twitch Status...</p>
+        <p id="live-status">Syncing Operator Intel...</p>
     </div>
     <div class="deals-grid" id="amazon-deals-target">
-        <p style="text-align:center;">Scanning inventory...</p>
+        <p style="text-align:center;">Deploying tactical inventory...</p>
     </div>
 </div>
 
 <script>
-    const TWITCH_USER = "werewolf3788"; //
+    const TWITCH_USER = "Werewolf3788"; 
     const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTFygWPIyqmgu02ImqUERdgBLcQ5jPSEgxQuqumbiKOVe4YX7bzawxLBGEi7okVKlak9JTWDvb9bUcf/pub?gid=0&single=true&output=csv";
 
     function spawnEquipment() {
-        if (!document.body.classList.contains('farming-mode')) return;
-        const equipment = ['🚜', '🌾', '🌱', '🧺', '🌽', '🌻'];
+        const body = document.body;
+        let equipment = [];
+        if (body.classList.contains('farming-mode')) equipment = ['🚜', '🌾', '🌱', '🌽', '🌻'];
+        if (body.classList.contains('wot-mode')) equipment = ['🛡️', '⚙️', '📻', '🛠️', '🚛'];
+        if (body.classList.contains('cod-mode')) equipment = ['🎧', '🎮', '🔋', '📦', '🎯'];
+        
+        if (equipment.length === 0) return;
         const el = document.createElement('div');
-        el.className = 'farm-pop';
+        el.className = 'game-pop';
         el.innerText = equipment[Math.floor(Math.random() * equipment.length)];
         el.style.left = Math.random() * 90 + 'vw';
         el.style.top = Math.random() * 90 + 'vh';
@@ -135,25 +139,36 @@
 
     async function checkTwitchMode() {
         try {
-            const res = await fetch(`https://decapi.me/twitch/game/${TWITCH_USER}`); //
+            const res = await fetch(`https://decapi.me/twitch/game/${TWITCH_USER}`);
             const game = (await res.text()).toLowerCase();
             const body = document.getElementById('main-body');
             const status = document.getElementById('live-status');
             body.className = '';
 
-            if (game.includes("need for speed") || game.includes("racing") || game.includes("driving")) {
+            if (game.includes("call of duty") || game.includes("warzone") || game.includes("mw3")) {
+                body.classList.add("cod-mode");
+                status.innerHTML = "🔫 COD MODE: Combat Advantage Active";
+                setInterval(spawnEquipment, 5000);
+            } else if (game.includes("world of tanks")) {
+                body.classList.add("wot-mode");
+                status.innerHTML = "🛡️ WORLD OF TANKS: Tactical Steel Active";
+                setInterval(spawnEquipment, 5000);
+            } else if (game.includes("ready or not")) {
+                body.classList.add("swat-mode");
+                status.innerHTML = "🛡️ SWAT MODE: Deployment Active";
+            } else if (game.includes("need for speed") || game.includes("racing")) {
                 body.classList.add("racing-mode");
-                status.innerHTML = `🏎️ Live/Offline: ${game.toUpperCase()} - Police Chase Active`;
+                status.innerHTML = `🏎️ RACING MODE: ${game.toUpperCase()}`;
             } else if (game.includes("farming") || game.includes("simulator")) {
                 body.classList.add("farming-mode");
-                status.innerHTML = `🚜 Last Played/Live: ${game.toUpperCase()}`;
+                status.innerHTML = `🚜 FARMING MODE: ${game.toUpperCase()}`;
                 setInterval(spawnEquipment, 5000);
             } else if (game.includes("angler")) {
                 body.classList.add("fishing-mode");
-                status.innerHTML = "🎣 Theme Active: The Angler";
-            } else if (game.includes("hunter") || game.includes("hunting") || game.includes("predator")) {
+                status.innerHTML = "🎣 FISHING MODE Active";
+            } else if (game.includes("hunter") || game.includes("hunting")) {
                 body.classList.add("hunting-mode");
-                status.innerHTML = "🎯 Theme Active: Hunting Mode";
+                status.innerHTML = "🎯 HUNTING MODE Active";
             } else {
                 status.innerHTML = "Real-Time Community Deals";
             }
@@ -167,10 +182,13 @@
             const rows = csvData.split('\n').filter(r => r.trim() !== "").slice(1);
             let htmlContent = "";
             const keywords = {
-                race: ["racing", "car", "speed", "police", "tire", "wheel", "engine"],
-                farm: ["farm", "tractor", "supply", "almanac", "harvest"],
-                hunt: ["hunting", "ammo", "gun", "camouflage", "scope"],
-                fish: ["fishing", "angler", "water", "boat"]
+                cod: ["headset", "controller", "fps", "gaming mouse", "monitor", "mic"],
+                wot: ["tank", "armor", "steel", "radio", "camouflage", "model"],
+                swat: ["tactical", "vest", "helmet", "boots", "flashlight"],
+                race: ["racing", "car", "speed", "tire", "engine"],
+                farm: ["farm", "tractor", "supply", "almanac"],
+                hunt: ["hunting", "ammo", "gun", "camouflage"],
+                fish: ["fishing", "angler", "boat"]
             };
 
             rows.forEach(row => {
@@ -180,27 +198,26 @@
                     let desc = cols[1].replace(/"/g, "").trim();
                     let url = cols[2].replace(/"/g, "").trim();
                     let img = cols[3]?.replace(/"/g, "").trim() || "https://placehold.co/150";
-                    let tag = cols[4]?.replace(/"/g, "").trim() || "werewolf3788-20"; //
+                    let tag = cols[4]?.replace(/"/g, "").trim() || "werewolf3788-20";
 
                     let content = (title + " " + desc).toLowerCase();
                     let isMatch = false;
                     const body = document.getElementById('main-body');
                     
+                    if (body.classList.contains('cod-mode')) isMatch = keywords.cod.some(k => content.includes(k));
+                    if (body.classList.contains('wot-mode')) isMatch = keywords.wot.some(k => content.includes(k));
+                    if (body.classList.contains('swat-mode')) isMatch = keywords.swat.some(k => content.includes(k));
                     if (body.classList.contains('racing-mode')) isMatch = keywords.race.some(k => content.includes(k));
                     if (body.classList.contains('farming-mode')) isMatch = keywords.farm.some(k => content.includes(k));
                     if (body.classList.contains('hunting-mode')) isMatch = keywords.hunt.some(k => content.includes(k));
                     if (body.classList.contains('fishing-mode')) isMatch = keywords.fish.some(k => content.includes(k));
 
                     let finalUrl = url.includes('?') ? `${url}&tag=${tag}` : `${url}?tag=${tag}`;
-                    htmlContent += `
-                        <div class="deal-box ${isMatch ? 'match-highlight' : ''}">
-                            <div class="deal-image-container"><img src="${img}" alt="${title}"></div>
-                            <div class="deal-info">
-                                <h2 class="deal-title">${title}</h2>
-                                <p class="deal-desc">${desc}</p>
-                            </div>
-                            <a href="${finalUrl}" target="_blank" class="buy-btn">View Deal</a>
-                        </div>`;
+                    htmlContent += `<div class="deal-box ${isMatch ? 'match-highlight' : ''}">
+                        <div class="deal-image-container"><img src="${img}" alt="${title}"></div>
+                        <div class="deal-info"><h2 class="deal-title">${title}</h2><p class="deal-desc">${desc}</p></div>
+                        <a href="${finalUrl}" target="_blank" class="buy-btn">View Deal</a>
+                    </div>`;
                 }
             });
             document.getElementById('amazon-deals-target').innerHTML = htmlContent;
