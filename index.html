@@ -37,6 +37,32 @@
             backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
+        /* Category Filter Controls */
+        .controls-row {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+
+        #category-select, .shuffle-btn {
+            padding: 12px 20px;
+            font-size: 1rem;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        #category-select { width: 100%; max-width: 280px; }
+        #category-select option { background: #222; color: #fff; }
+        .shuffle-btn:hover { background: rgba(255, 255, 255, 0.2); }
+
         /* GRID LAYOUT: Side-by-Side */
         .deals-grid { 
             display: grid; 
@@ -58,37 +84,17 @@
             text-align: center;
         }
 
+        .deal-box.hidden { display: none; }
+
         /* --- DYNAMIC MODE HIGHLIGHTS --- */
 
-        /* COD: Digital Glitch */
-        body.cod-mode .deal-box.match-highlight { 
-            border: 2px solid #9ef01a; 
-            animation: glitchBorder 1.5s infinite;
-        }
-        @keyframes glitchBorder {
-            0% { box-shadow: 0 0 10px #9ef01a; }
-            50% { box-shadow: 2px -2px 15px #38b000, -2px 2px 15px #9ef01a; }
-            100% { box-shadow: 0 0 10px #9ef01a; }
-        }
-
-        /* WOT: Steel Armor Glow */
+        body.cod-mode .deal-box.match-highlight { border: 2px solid #9ef01a; animation: glitchBorder 1.5s infinite; }
+        @keyframes glitchBorder { 0% { box-shadow: 0 0 10px #9ef01a; } 50% { box-shadow: 2px -2px 15px #38b000, -2px 2px 15px #9ef01a; } 100% { box-shadow: 0 0 10px #9ef01a; } }
         body.wot-mode .deal-box.match-highlight { border: 2px solid #8b9467; box-shadow: 0 0 20px rgba(139, 148, 103, 0.5); }
-
-        /* SWAT: Tactical Strobe */
-        body.swat-mode .deal-box.match-highlight { animation: swatStrobe 0.5s infinite alternate; }
-        @keyframes swatStrobe {
-            0% { border-color: #1a237e; box-shadow: 0 0 15px rgba(26, 35, 126, 0.7); }
-            100% { border-color: #d32f2f; box-shadow: 0 0 10px rgba(211, 47, 47, 0.5); }
-        }
-
-        /* Racing: Police Flash */
-        body.racing-mode .deal-box.match-highlight { animation: policeFlash 0.8s infinite alternate; }
-        @keyframes policeFlash {
-            0% { border-color: #ff0000; box-shadow: 0 0 15px rgba(255, 0, 0, 0.6); }
-            100% { border-color: #0000ff; box-shadow: 0 0 15px rgba(0, 0, 255, 0.6); }
-        }
-
-        /* Standard Game Highlights */
+        body.swat-mode .deal-box.match-highlight { animation: swatStrobe 0.5s infinite alternate; border-width: 2px; }
+        @keyframes swatStrobe { 0% { border-color: #1a237e; box-shadow: 0 0 15px rgba(26, 35, 126, 0.7); } 100% { border-color: #d32f2f; box-shadow: 0 0 10px rgba(211, 47, 47, 0.5); } }
+        body.racing-mode .deal-box.match-highlight { animation: policeFlash 0.8s infinite alternate; border-width: 2px; }
+        @keyframes policeFlash { 0% { border-color: #ff0000; box-shadow: 0 0 15px rgba(255, 0, 0, 0.6); } 100% { border-color: #0000ff; box-shadow: 0 0 15px rgba(0, 255, 0, 0.6); } }
         body.farming-mode .deal-box.match-highlight { border: 2px solid #ffde00; box-shadow: 0 0 20px #ffde0066; }
         body.hunting-mode .deal-box.match-highlight { border: 2px solid #355e3b; box-shadow: 0 0 20px #355e3b66; }
         body.fishing-mode .deal-box.match-highlight { border: 2px solid #0077be; box-shadow: 0 0 20px #0077be66; }
@@ -100,31 +106,15 @@
         body.racing-mode { background: linear-gradient(180deg, #1a1a1a 0%, #000 100%); cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><text x="0" y="24" font-size="24">🏎️</text></svg>'), auto; }
         body.farming-mode { background: linear-gradient(180deg, #367c2b 0%, #1a3a16 100%); cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><text x="0" y="24" font-size="24">🚜</text></svg>'), auto; }
         body.farming-mode::before { content: ""; position: fixed; bottom: 0; left: 0; width: 100%; height: 180px; background: url('https://www.transparenttextures.com/patterns/grass.png'); opacity: 0.25; pointer-events: none; }
-        body.hunting-mode { background: linear-gradient(180deg, #1b3022 0%, #000 100%); cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><circle cx="16" cy="16" r="12" stroke="%23355e3b" stroke-width="1" fill="none"><animate attributeName="r" values="8;12;8" dur="2s" repeatCount="indefinite" /></circle><line x1="16" y1="2" x2="16" y2="30" stroke="%23355e3b"/><line x1="2" y1="16" x2="30" y2="16" stroke="%23355e3b"/></svg>'), auto; }
+        body.hunting-mode { background: linear-gradient(180deg, #1b3022 0%, #000 100%); cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><circle cx="16" cy="16" r="12" stroke="%23355e3b" stroke-width="1" fill="none"><animate attributeName="r" values="8;12;8" dur="2s" repeatCount="indefinite" /></circle><line x1="16" y1="2" x2="16" y2="30" stroke="%23355e3b"/><line x1="0" y1="16" x2="32" y2="16" stroke="%23355e3b"/></svg>'), auto; }
         body.fishing-mode { background: linear-gradient(180deg, #001f3f 0%, #000 100%); cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><circle cx="16" cy="16" r="10" stroke="%230077be" stroke-width="2" fill="none" opacity="0.6"><animate attributeName="r" from="10" to="15" dur="1s" repeatCount="indefinite" /><animate attributeName="opacity" from="0.6" to="0" dur="1s" repeatCount="indefinite" /></circle></svg>'), auto; }
 
-        /* OVERLAY ICONS: Higher z-index to show above content */
-        .game-pop { 
-            position: fixed; 
-            font-size: 3rem; 
-            opacity: 0; 
-            transition: opacity 1s; 
-            pointer-events: none; 
-            z-index: 9999; /* Changed to show above everything */
-        }
+        .game-pop { position: fixed; font-size: 3rem; opacity: 0; transition: opacity 1s; pointer-events: none; z-index: 9999; }
 
         .deal-image-container { 
-            width: 100%; 
-            max-width: 220px; 
-            aspect-ratio: 1/1; 
-            margin-bottom: 15px; 
-            border-radius: 10px; 
-            background: #fff; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            padding: 15px; 
-            overflow: hidden; 
+            width: 100%; max-width: 220px; aspect-ratio: 1/1; margin-bottom: 15px; 
+            border-radius: 10px; background: #fff; display: flex; align-items: center; 
+            justify-content: center; padding: 15px; overflow: hidden; 
         }
         .deal-image-container img { width: 100%; height: 100%; object-fit: contain; }
         
@@ -132,27 +122,11 @@
         .deal-title { font-size: 1.1rem; margin: 0 0 10px 0; color: #fff; font-weight: bold; }
         .deal-desc { font-size: 0.9rem; color: #ccc; margin: 0; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
         
-        .buy-btn { 
-            background: #ff9900; 
-            color: #111; 
-            text-decoration: none; 
-            padding: 12px 20px; 
-            font-weight: bold; 
-            border-radius: 8px; 
-            width: 100%; 
-            transition: 0.2s;
-        }
+        .buy-btn { background: #ff9900; color: #111; text-decoration: none; padding: 12px 20px; font-weight: bold; border-radius: 8px; width: 100%; transition: 0.2s; }
         .buy-btn:hover { background: #e68a00; }
 
-        @media (max-width: 900px) {
-            .deals-grid { gap: 15px; }
-        }
-
-        @media (max-width: 650px) { 
-            .deals-grid { grid-template-columns: 1fr; }
-            .deal-box { padding: 25px 20px; }
-            .deal-image-container { max-width: 250px; }
-        }
+        @media (max-width: 900px) { .deals-grid { gap: 15px; } }
+        @media (max-width: 650px) { .deals-grid { grid-template-columns: 1fr; } .deal-box { padding: 25px 20px; } .deal-image-container { max-width: 250px; } }
     </style>
 </head>
 <body id="main-body">
@@ -162,6 +136,15 @@
         <h1>Amazon Clearance Picks</h1>
         <p id="live-status">Syncing Operator Intel...</p>
     </div>
+
+    <!-- Category Dropdown and Shuffle -->
+    <div class="controls-row">
+        <select id="category-select">
+            <option value="all">View All Categories</option>
+        </select>
+        <button class="shuffle-btn" onclick="loadDeals()">🎲 Reshuffle</button>
+    </div>
+
     <div class="deals-grid" id="amazon-deals-target">
         <p style="text-align:center;">Deploying tactical inventory...</p>
     </div>
@@ -176,8 +159,6 @@
     function spawnEquipment() {
         const body = document.body;
         let equipment = [];
-        
-        // Define icons for every mode
         if (body.classList.contains('farming-mode')) equipment = ['🚜', '🌾', '🌱', '🌽', '🌻'];
         if (body.classList.contains('wot-mode')) equipment = ['🛡️', '⚙️', '📻', '🛠️', '🚛'];
         if (body.classList.contains('cod-mode')) equipment = ['🎧', '🎮', '🔋', '📦', '🎯'];
@@ -185,16 +166,13 @@
         if (body.classList.contains('racing-mode')) equipment = ['🏎️', '🏁', '🚦', '🔧', '⛽'];
         if (body.classList.contains('hunting-mode')) equipment = ['🏹', '🦌', '🌲', '🔭', '🏕️'];
         if (body.classList.contains('fishing-mode')) equipment = ['🎣', '🐟', '🛶', '⚓', '🌊'];
-        
         if (equipment.length === 0) return;
-        
         const el = document.createElement('div');
         el.className = 'game-pop';
         el.innerText = equipment[Math.floor(Math.random() * equipment.length)];
         el.style.left = Math.random() * 90 + 'vw';
         el.style.top = Math.random() * 90 + 'vh';
         document.body.appendChild(el);
-        
         setTimeout(() => el.style.opacity = '0.4', 100);
         setTimeout(() => el.style.opacity = '0', 3000);
         setTimeout(() => el.remove(), 4500);
@@ -208,8 +186,6 @@
             const gameLower = game.toLowerCase();
             const body = document.getElementById('main-body');
             const status = document.getElementById('live-status');
-            
-            // Clear existing intervals if necessary (optional, browser handles many timers fine)
             body.className = ''; 
 
             if (gameLower.includes("call of duty") || gameLower.includes("warzone") || gameLower.includes("mw3")) {
@@ -236,7 +212,6 @@
             } else {
                 status.innerHTML = "Real-Time Community Deals";
             }
-            
             loadDeals();
         } catch (e) { status.innerHTML = "Amazon Affiliate Hub"; }
     }
@@ -257,6 +232,10 @@
             const shuffledRows = shuffleArray([...rows]);
             
             let htmlContent = "";
+            let categories = new Set();
+            const select = document.getElementById('category-select');
+            const currentFilter = select.value;
+
             const keywords = {
                 cod: ["headset", "controller", "fps", "gaming mouse", "monitor", "mic"],
                 wot: ["tank", "armor", "steel", "radio", "camouflage", "model"],
@@ -278,6 +257,8 @@
                     let img = cols[3]?.replace(/"/g, "").trim() || "https://placehold.co/150";
                     let tag = cols[4]?.replace(/"/g, "").trim() || "werewolf3788-20";
 
+                    categories.add(tag);
+
                     let content = (title + " " + desc).toLowerCase();
                     let isMatch = false;
                     const body = document.getElementById('main-body');
@@ -295,20 +276,46 @@
                     }
 
                     let finalUrl = url.includes('?') ? `${url}&tag=${tag}` : `${url}?tag=${tag}`;
-                    htmlContent += `<div class="deal-box ${isMatch ? 'match-highlight' : ''}">
+                    
+                    // Render html but control visibility based on filter
+                    let isHidden = (currentFilter !== 'all' && tag !== currentFilter) ? 'hidden' : '';
+
+                    htmlContent += `<div class="deal-box ${isMatch ? 'match-highlight' : ''} ${isHidden}" data-tag="${tag}">
                         <div class="deal-image-container"><img src="${img}" alt="${title}"></div>
                         <div class="deal-info"><h2 class="deal-title">${title}</h2><p class="deal-desc">${desc}</p></div>
                         <a href="${finalUrl}" target="_blank" class="buy-btn">View Deal</a>
                     </div>`;
                 }
             });
+
+            // Update dropdown if it only has the default option
+            if (select.options.length === 1) {
+                Array.from(categories).sort().forEach(cat => {
+                    const opt = document.createElement('option');
+                    opt.value = cat;
+                    opt.innerHTML = cat.replace("-20", "").toUpperCase();
+                    select.appendChild(opt);
+                });
+            }
+
             document.getElementById('amazon-deals-target').innerHTML = htmlContent;
         } catch (e) { console.log("Inventory error."); }
     }
 
+    // Dropdown change logic
+    document.getElementById('category-select').addEventListener('change', (e) => {
+        const val = e.target.value;
+        document.querySelectorAll('.deal-box').forEach(box => {
+            if (val === 'all') {
+                box.classList.remove('hidden');
+            } else {
+                box.classList.toggle('hidden', box.getAttribute('data-tag') !== val);
+            }
+        });
+    });
+
     window.onload = async () => {
         await checkTwitchMode();
-        // Start the icon spawning loop
         setInterval(spawnEquipment, 5000);
         setInterval(checkTwitchMode, 300000);
     };
